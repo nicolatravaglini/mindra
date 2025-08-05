@@ -37,6 +37,7 @@ router.post("/", async (req, res) => {
             { googleId: googleId },
             {
                 $set: {
+                    googleId: googleId,
                     email: email,
                     name: name,
                     picture: picture,

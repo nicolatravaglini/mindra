@@ -2,18 +2,26 @@
 import { GoogleSignInButton } from "vue3-google-signin";
 import { useRouter } from "vue-router";
 import { sendGoogleIdToken } from "../api/auth.js";
+import { useUserStore } from "../stores/user.js";
 
 const router = useRouter();
+const userStore = useUserStore();
 
 async function handleLoginSuccess(response) {
     const credential = response.credential;
     console.log("ID Token JWT:", credential);
     const res = await sendGoogleIdToken(credential);
 
-    console.log(await res.json());
+    console.log(res);
 
-    if (res.ok) router.push("/courses");
-    else console.error("errore");
+    if (res.ok) {
+        const data = await res.json();
+        userStore.name = data.user.name;
+        userStore.picture = data.user.picture;
+        router.push("/courses");
+    } else {
+        console.error("errore");
+    }
 }
 
 function handleLoginError() {
@@ -22,11 +30,21 @@ function handleLoginError() {
 </script>
 
 <template>
-    <h1>Mindra</h1>
-    <p>Accedi per iniziare</p>
-    <br />
-    <GoogleSignInButton
-        @success="handleLoginSuccess"
-        @error="handleLoginError"
-    />
+    <div class="container-fluid min-vh-100 d-flex flex-column">
+        <main
+            class="flex-grow-1 d-flex align-items-center justify-content-center"
+        >
+            <div class="text-center">
+                <h1 class="fw-bold mb-3" style="font-size: 2.5rem">Mindra</h1>
+                <p class="fw-normal mb-4" style="font-size: 1.1rem">
+                    Accedi per iniziare
+                </p>
+
+                <GoogleSignInButton
+                    @success="handleLoginSuccess"
+                    @error="handleLoginError"
+                />
+            </div>
+        </main>
+    </div>
 </template>

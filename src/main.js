@@ -1,14 +1,21 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import "./style.css";
 import App from "./App.vue";
 import router from "./router/router.js";
 import GoogleSignInPlugin from "vue3-google-signin";
 
+const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
+
 const app = createApp(App);
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+
 app.use(router);
+app.use(pinia);
 app.use(GoogleSignInPlugin, {
-    clientId:
-        "71677208610-9ccg33h9hb9bbo31m8uoqoa1n6g9nn71.apps.googleusercontent.com",
+    clientId: CLIENT_ID,
 });
 
 app.mount("#app");

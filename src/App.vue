@@ -1,9 +1,9 @@
 <script setup>
-import CoursesMenu from "./components/CoursesMenu.vue";
+import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <CoursesMenu />
+    <RouterView />
 </template>
 
 <style scoped></style>

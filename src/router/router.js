@@ -1,13 +1,29 @@
-import { createMemoryHistory, createRouter } from 'vue-router';
-import CoursesMenu from '../components/CoursesMenu.vue';
+import { createWebHistory, createRouter } from "vue-router";
+import Login from "../components/Login.vue";
+import CoursesMenu from "../components/CoursesMenu.vue";
+import { checkAuth } from "../utils/checkAuth.js";
 
 const routes = [
-  { path: '/', component: CoursesMenu },
+    { path: "/", redirect: "/login" },
+    { path: "/login", component: Login, meta: { login: true } },
+    { path: "/courses", component: CoursesMenu, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
-  history: createMemoryHistory(),
-  routes,
+    history: createWebHistory(),
+    routes,
 });
 
-export default { router };
+router.beforeEach(async (to, from, next) => {
+    if (to.meta.requiresAuth) {
+        const authenticated = await checkAuth();
+        if (!authenticated) return next("/login");
+        next();
+    } else if (to.meta.login) {
+        const authenticated = await checkAuth();
+        if (authenticated) return next("/courses");
+        next();
+    }
+});
+
+export default router;

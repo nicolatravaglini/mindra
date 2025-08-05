@@ -1,16 +1,20 @@
 import express from "express";
 import { promisify } from "util";
+import isAuthenticated from "./isAuth.js";
 
-export default function (db) {
+export default function (dbCourse, dbUser) {
     const router = express.Router();
 
-    const dbInsert = promisify(db.insert.bind(db));
-    const dbFind = promisify(db.find.bind(db));
+    const dbInsert = promisify(dbCourse.insert.bind(dbCourse));
+    const dbFind = promisify(dbCourse.find.bind(dbCourse));
 
-    router.post("/", async (req, res) => {
+    const auth = isAuthenticated(dbUser);
+
+    router.post("/", auth, async (req, res) => {
         try {
             const body = req.body;
             if (!body) return res.status(400).json({ error: "Invalid body" });
+            body.userId = req.session.userId;
             const newCourse = await dbInsert(body);
             console.log("Insertion completed:", newCourse);
             res.status(201).json(newCourse);
@@ -20,9 +24,10 @@ export default function (db) {
         }
     });
 
-    router.get("/", async (req, res) => {
+    router.get("/", auth, async (req, res) => {
         try {
-            const allCourses = await dbFind({});
+            const userId = req.session.userId;
+            const allCourses = await dbFind({ userId: userId });
             res.status(200).json({ courses: allCourses });
         } catch (err) {
             console.error("Error while fetching:", err);

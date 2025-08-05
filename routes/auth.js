@@ -16,14 +16,12 @@ async function verify(id_token) {
 }
 
 export default function () {
-    console.log("authentication started");
     const router = express.Router();
 
-    const db = DbDAO.getInstance();
+    const db = new DbDAO();
 
     router.post("/", async (req, res) => {
         const { id_token } = req.body;
-        console.log(id_token);
 
         if (!id_token) {
             return res.status(400).json({ error: "Token ID missing" });
@@ -52,13 +50,9 @@ export default function () {
             );
 
             // Recupera l'utente aggiornato
-            const user = await db.call("user", "findOne", {
-                googleId: googleId,
-            });
+            const user = await db.call("user", "find", { googleId: googleId });
 
             req.session.userId = user._id;
-            req.session.save();
-
             console.log(req.session);
 
             const isNewUser = result.numAffected === 0 && result.upserted;

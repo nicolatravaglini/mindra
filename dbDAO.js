@@ -5,15 +5,6 @@ const collections = ["course", "user"];
 const operators = ["findOne", "find", "update", "insert"];
 
 class DbDAO {
-    static instance = null;
-
-    static getInstance() {
-        if (!DbDAO.instance) {
-            DbDAO.instance = new DbDAO();
-        }
-        return DbDAO.instance;
-    }
-
     constructor() {
         this.db = {};
         collections.forEach((coll) => {
@@ -27,6 +18,7 @@ class DbDAO {
                 this.db[coll][oper] = promisify(ds[oper].bind(ds));
             });
         });
+        console.log(this.db);
     }
 
     async call(collection, operator, ...parameters) {

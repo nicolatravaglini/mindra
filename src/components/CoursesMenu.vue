@@ -1,35 +1,29 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { addCourse } from "../api/course.js";
+import { addCourse, getCourses } from "../api/course.js";
 
-let courses = ref([
-    {
-        name: "Ottimizzazione combinatoria",
-    },
-    {
-        name: "Linguaggi di programmazione",
-    },
-    {
-        name: "Probabilità e statistica",
-    },
-]);
-
+const courses = ref([]);
 const showForm = ref(false);
 const formCourse = ref({
     name: "",
 });
 
-async function submitForm() {
-    console.log(formCourse.value);
+async function submitCourse() {
     const data = await addCourse(formCourse.value);
-    console.log(data);
+    courses.value = await getCourses();
+    showForm.value = false;
+    formCourse.value = { name: "" };
 }
+
+onMounted(async () => {
+    courses.value = await getCourses();
+});
 </script>
 
 <template>
     <h1>Mindra</h1>
     <div>
-        <h3 v-if="courses">Your courses:</h3>
+        <h3 v-if="courses.length">Your courses:</h3>
         <h3 v-else>No courses yet!</h3>
 
         <div class="d-flex flex-column">
@@ -59,7 +53,9 @@ async function submitForm() {
             </div>
 
             <div class="d-flex justify-content-between">
-                <button class="btn btn-success" @click="submitForm">Add</button>
+                <button class="btn btn-success" @click="submitCourse">
+                    Add
+                </button>
                 <button
                     class="btn btn-outline-secondary"
                     @click="showForm = false"

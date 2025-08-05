@@ -3,16 +3,27 @@ import cors from "cors";
 import Datastore from "nedb";
 import courseRoute from "./routes/course.js";
 import authRoute from "./routes/auth.js";
+import userRoute from "./routes/user.js";
 import isAuthenticated from "./routes/isAuth.js";
 import session from "express-session";
-import { OAuth2Client } from "google-auth-library";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+global.rootDir = __dirname;
+// dotenv.config();
+dotenv.config({ path: `${global.rootDir}/.env` });
+
+// MongoDB
+const uri = process.env.MONGODB_DEV;
+await mongoose.connect(uri);
+console.log("MongoDB connection settled");
 
 const app = express();
-const port = 8000;
-
-const CLIENT_ID =
-    "71677208610-9ccg33h9hb9bbo31m8uoqoa1n6g9nn71.apps.googleusercontent.com";
-const client = new OAuth2Client(CLIENT_ID);
+const port = process.env.PORT_PROD;
 
 app.use(express.json({ limit: "50mb" }));
 app.use(
@@ -23,8 +34,7 @@ app.use(
 );
 app.use(
     session({
-        // TODO: change secret key
-        secret: "INDOVINA",
+        secret: process.env.SECRET_KEY,
         resave: false,
         saveUninitialized: true,
         cookie: {
@@ -36,25 +46,15 @@ app.use(
     }),
 );
 
-// Database
-let db = {};
-db.course = new Datastore({
-    filename: "./db/course.db",
-    autoload: true,
-});
-db.user = new Datastore({
-    filename: "./db/user.db",
-    autoload: true,
-});
-
 // Check auth
-app.get("/api/isauth", isAuthenticated(db.user), (req, res) => {
+app.get("/api/isauth", isAuthenticated, (req, res) => {
     res.status(200).send();
 });
 
 // Routes
-app.use("/api/course", courseRoute(db.course, db.user));
-app.use("/api/auth", authRoute(db.user, client, CLIENT_ID));
+app.use("/api/course", courseRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/user", userRoute);
 
 // Client
 app.use(express.static("dist"));

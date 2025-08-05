@@ -10,10 +10,13 @@
     },
     "dependencies": {
         "cors": "^2.8.5",
+        "dotenv": "^16.6.1",
         "express": "^5.1.0",
         "express-session": "^1.18.2",
         "google-auth-library": "^10.2.1",
+        "mongoose": "^8.17.0",
         "nedb": "^1.8.0",
+        "pinia": "^3.0.3",
         "vue": "^3.5.17",
         "vue-router": "^4.5.1",
         "vue3-google-signin": "^2.1.1"

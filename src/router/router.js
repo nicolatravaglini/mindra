@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "../components/Login.vue";
 import CoursesMenu from "../components/CoursesMenu.vue";
-import { checkAuth } from "../utils/checkAuth.js";
+import { checkAuth } from "../api/checkAuth.js";
 
 const routes = [
     { path: "/", redirect: "/login" },

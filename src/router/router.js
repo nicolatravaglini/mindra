@@ -1,5 +1,5 @@
 import { createMemoryHistory, createRouter } from 'vue-router';
-import CoursesMenu from './components/CoursesMenu.vue';
+import CoursesMenu from '../components/CoursesMenu.vue';
 
 const routes = [
   { path: '/', component: CoursesMenu },

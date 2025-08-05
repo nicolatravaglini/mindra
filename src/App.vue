@@ -1,10 +1,9 @@
 <script setup>
-import CoursesMenu from './components/CoursesMenu.vue';
+import CoursesMenu from "./components/CoursesMenu.vue";
 </script>
 
 <template>
-	<CoursesMenu />
+  <CoursesMenu />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

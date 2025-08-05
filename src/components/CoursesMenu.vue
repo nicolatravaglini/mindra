@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue';
+
 let courses = [
 	{
 		"name": "Ottimizzazione combinatoria",
@@ -10,11 +12,16 @@ let courses = [
 		"name": "Probabilità e statistica",
 	},
 ];
+
+const showForm = ref(false);
+const formData = ref({
+  name: '',
+});
 </script>
 
 <template>
   <h1>
-	  StudyFlow
+	  Mindra
   </h1>
   <div>
 	  <h3 v-if="courses">
@@ -28,9 +35,22 @@ let courses = [
 			  {{ course.name }}
 		  </button>
 	  </div>
-	  <button class="btn btn-outline-dark my-2" @click="">
-		  Aggiungi un corso
+
+	  <button class="btn btn-outline-dark my-2" @click="showForm = true" v-if="!showForm">
+		  Add a course
 	  </button>
+
+	  <div v-if="showForm">
+		  <div class="form-floating mb-3">
+			<input v-model="formData.name" type="text" class="form-control" id="name" placeholder="Name">
+			<label for="name">Name</label>
+		  </div>
+
+		  <div class="d-flex justify-content-between">
+			<button class="btn btn-success" @click="submitForm">Add</button>
+			<button class="btn btn-outline-secondary" @click="showForm = false">Close</button>
+		  </div>
+	  </div>
   </div>
 </template>
 

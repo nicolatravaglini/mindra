@@ -1,7 +1,13 @@
 import express from "express";
 import { promisify } from "util";
+import { OAuth2Client } from "google-auth-library";
+import DbDAO from "../dbDAO.js";
 
-async function verify(id_token, client, CLIENT_ID) {
+const CLIENT_ID =
+    "71677208610-9ccg33h9hb9bbo31m8uoqoa1n6g9nn71.apps.googleusercontent.com";
+const client = new OAuth2Client(CLIENT_ID);
+
+async function verify(id_token) {
     const ticket = await client.verifyIdToken({
         idToken: id_token,
         audience: CLIENT_ID,
@@ -9,12 +15,10 @@ async function verify(id_token, client, CLIENT_ID) {
     return ticket.getPayload();
 }
 
-export default function (db, client, CLIENT_ID) {
+export default function () {
     const router = express.Router();
 
-    const dbFindOne = promisify(db.findOne.bind(db));
-    const dbUpdate = promisify(db.update.bind(db));
-    const dbInsert = promisify(db.insert.bind(db));
+    const db = new DbDAO();
 
     router.post("/", async (req, res) => {
         const { id_token } = req.body;
@@ -28,7 +32,9 @@ export default function (db, client, CLIENT_ID) {
             const { sub: googleId, email, name, picture } = payload;
 
             // Usa upsert per inserire o aggiornare in una sola operazione
-            const result = await dbUpdate(
+            const result = await db.call(
+                "user",
+                "update",
                 { googleId: googleId },
                 {
                     $set: {
@@ -44,9 +50,10 @@ export default function (db, client, CLIENT_ID) {
             );
 
             // Recupera l'utente aggiornato
-            const user = await dbFindOne({ googleId: googleId });
+            const user = await db.call("user", "find", { googleId: googleId });
 
             req.session.userId = user._id;
+            console.log(req.session);
 
             const isNewUser = result.numAffected === 0 && result.upserted;
 

@@ -1,21 +1,19 @@
 import express from "express";
 import { promisify } from "util";
 import isAuthenticated from "./isAuth.js";
+import DbDAO from "../dbDAO.js";
 
-export default function (dbCourse, dbUser) {
+export default function () {
     const router = express.Router();
 
-    const dbInsert = promisify(dbCourse.insert.bind(dbCourse));
-    const dbFind = promisify(dbCourse.find.bind(dbCourse));
+    const db = new DbDAO();
 
-    const auth = isAuthenticated(dbUser);
-
-    router.post("/", auth, async (req, res) => {
+    router.post("/", isAuthenticated, async (req, res) => {
         try {
             const body = req.body;
             if (!body) return res.status(400).json({ error: "Invalid body" });
             body.userId = req.session.userId;
-            const newCourse = await dbInsert(body);
+            const newCourse = await db.call("courses", "insert", body);
             console.log("Insertion completed:", newCourse);
             res.status(201).json(newCourse);
         } catch (err) {
@@ -24,10 +22,12 @@ export default function (dbCourse, dbUser) {
         }
     });
 
-    router.get("/", auth, async (req, res) => {
+    router.get("/", isAuthenticated, async (req, res) => {
         try {
             const userId = req.session.userId;
-            const allCourses = await dbFind({ userId: userId });
+            const allCourses = await db.call("courses", "find", {
+                userId: userId,
+            });
             res.status(200).json({ courses: allCourses });
         } catch (err) {
             console.error("Error while fetching:", err);

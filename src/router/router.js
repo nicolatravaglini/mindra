@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "../components/Login.vue";
 import CoursesMenu from "../components/CoursesMenu.vue";
-import { checkAuth } from "../utils/checkAuth.js";
+import { checkAuth } from "../api/checkAuth.js";
 
 const routes = [
     { path: "/", redirect: "/login" },
@@ -17,10 +17,12 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     if (to.meta.requiresAuth) {
         const authenticated = await checkAuth();
+        console.log(authenticated);
         if (!authenticated) return next("/login");
         next();
     } else if (to.meta.login) {
         const authenticated = await checkAuth();
+        console.log(authenticated);
         if (authenticated) return next("/courses");
         next();
     }

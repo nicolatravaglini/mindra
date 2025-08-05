@@ -2,7 +2,10 @@ import { promisify } from "util";
 import DbDAO from "../dbDAO.js";
 
 export default async function (req, res, next) {
-    const db = new DbDAO();
+    const db = DbDAO.getInstance();
+
+    console.log(req.session);
+
     if (req.session && req.session.userId) {
         const user = await db.call("user", "findOne", {
             _id: req.session.userId,
@@ -16,7 +19,6 @@ export default async function (req, res, next) {
             next();
         }
     } else {
-        console.log(req.session);
         res.status(401).json({ error: "Not authorized" });
     }
 }

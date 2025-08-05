@@ -10,7 +10,7 @@ async function handleLoginSuccess(response) {
     console.log("ID Token JWT:", credential);
     const res = await sendGoogleIdToken(credential);
 
-    const j = (await res).json();
+    const j = await res.json();
     console.log(j);
 
     if (res.ok) router.push("/courses");

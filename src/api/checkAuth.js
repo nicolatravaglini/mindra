@@ -5,5 +5,6 @@ export async function checkAuth() {
         method: "GET",
         credentials: "include",
     });
+    console.log(response);
     return response.ok;
 }

@@ -20,7 +20,7 @@ app.use(
         // TODO: change secret key
         secret: "INDOVINA",
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         cookie: {
             maxAge: 3600000,
             httpOnly: true,

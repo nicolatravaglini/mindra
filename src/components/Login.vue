@@ -9,10 +9,7 @@ const userStore = useUserStore();
 
 async function handleLoginSuccess(response) {
     const credential = response.credential;
-    console.log("ID Token JWT:", credential);
     const res = await sendGoogleIdToken(credential);
-
-    console.log(res);
 
     if (res.ok) {
         const data = await res.json();

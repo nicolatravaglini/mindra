@@ -1,5 +1,4 @@
 import express from "express";
-import { promisify } from "util";
 import isAuthenticated from "./isAuth.js";
 import { Course } from "../schemas.js";
 

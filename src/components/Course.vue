@@ -3,34 +3,56 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user.js";
 import { useCourseStore } from "../stores/course.js";
+import {
+    getMaterialsFromCourseById,
+    addMaterialsToCourse,
+    deleteMaterialFromCourseById,
+} from "../api/material.js";
 
 const router = useRouter();
 const userStore = useUserStore();
 const courseStore = useCourseStore();
 
-// TODO: at least pdfs!
+// TODO: at least pdfs (with parsing)!
 const supportedExtensions = ["txt", "md"];
 const files = ref([]);
 const fileInput = ref(null);
 
-function addFiles(fileList) {
-    for (const file of fileList) {
-        // NOTE: they're considered plain text files...
+function readFileAsText(file) {
+    // NOTE: they're all considered plain text files...
+    return new Promise((resolve, reject) => {
         const reader = new FileReader();
 
-        reader.onload = () => {
-            files.value.push({
-                name: file.name,
-                content: reader.result,
-            });
-        };
-
-        reader.onerror = () => {
-            console.error("Errore nella lettura del file:", file.name);
-        };
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
 
         reader.readAsText(file);
+    });
+}
+
+async function downloadFiles() {
+    files.value = await getMaterialsFromCourseById(courseStore._id);
+}
+
+async function uploadFiles(fileList) {
+    let materials = [];
+
+    for (const file of fileList) {
+        const content = await readFileAsText(file);
+        materials.push({
+            fileName: file.name,
+            content: content,
+        });
     }
+
+    console.log(materials);
+
+    await addMaterialsToCourse(courseStore._id, materials);
+    await downloadFiles();
+}
+
+async function deleteFile(id) {
+    await deleteMaterialFromCourseById(id);
 }
 
 function triggerFileInput() {
@@ -38,7 +60,7 @@ function triggerFileInput() {
 }
 
 function handleDrop(event) {
-    addFiles(event.dataTransfer.files);
+    uploadFiles(event.dataTransfer.files);
 }
 
 function handleFileSelect(event) {
@@ -47,13 +69,13 @@ function handleFileSelect(event) {
     Array.from(event.target.files).forEach((file) => {
         const extension = file.name.toLowerCase().split(".").pop();
         if (!supportedExtensions.includes(extension)) {
-            console.log("File", file.name, "non supportato ancora!");
+            console.log("File", file.name, "non supported yet!");
         } else {
             validFiles.push(file);
         }
     });
 
-    addFiles(validFiles);
+    uploadFiles(validFiles);
 }
 
 async function confirmFiles() {
@@ -64,6 +86,18 @@ function goBack() {
     courseStore.$reset();
     router.push("/courses");
 }
+
+async function logoutAndLogin() {
+    const response = await logout();
+    if (response.ok) {
+        userStore.$reset();
+        router.push("/login");
+    }
+}
+
+onMounted(async () => {
+    await downloadFiles();
+});
 </script>
 
 <template>
@@ -131,7 +165,7 @@ function goBack() {
                 <h5 class="mb-3">Materiale caricato</h5>
                 <ul class="list-unstyled">
                     <li v-for="(file, index) in files" :key="index">
-                        {{ file.name }}
+                        {{ file.fileName }}
                     </li>
                     <li v-if="files.length === 0" class="text-muted">
                         Nessun file caricato.

@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
 import Datastore from "nedb";
-import courseRoute from "./routes/course.js";
 import authRoute from "./routes/auth.js";
 import userRoute from "./routes/user.js";
+import courseRoute from "./routes/course.js";
+import materialRoute from "./routes/material.js";
 import isAuthenticated from "./routes/isAuth.js";
 import session from "express-session";
 import dotenv from "dotenv";
@@ -14,7 +15,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 global.rootDir = __dirname;
-// dotenv.config();
 dotenv.config({ path: `${global.rootDir}/.env` });
 
 // MongoDB
@@ -35,7 +35,7 @@ app.use(
 app.use(
     session({
         secret: process.env.SECRET_KEY,
-        resave: false,
+        resave: true,
         saveUninitialized: true,
         cookie: {
             maxAge: 3600000,
@@ -52,9 +52,10 @@ app.get("/api/isauth", isAuthenticated, (req, res) => {
 });
 
 // Routes
-app.use("/api/course", courseRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
+app.use("/api/course", courseRoute);
+app.use("/api/material", materialRoute);
 
 // Client
 app.use(express.static("dist"));

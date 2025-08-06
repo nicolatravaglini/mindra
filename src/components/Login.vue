@@ -23,7 +23,7 @@ async function handleLoginSuccess(response) {
 }
 
 function handleLoginError() {
-    console.error("Login fallito");
+    console.error("Login failed");
 }
 </script>
 
@@ -35,7 +35,7 @@ function handleLoginError() {
             <div class="text-center">
                 <h1 class="fw-bold mb-3" style="font-size: 2.5rem">Mindra</h1>
                 <p class="fw-normal mb-4" style="font-size: 1.1rem">
-                    Accedi per iniziare
+                    Login to start
                 </p>
 
                 <GoogleSignInButton

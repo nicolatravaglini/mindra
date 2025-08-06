@@ -16,9 +16,14 @@ export async function getCourses() {
     const response = await fetch(`${API_URL}/api/course`, {
         method: "GET",
         credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
     });
     return (await response.json()).courses;
+}
+
+export async function getCourse(id) {
+    const response = await fetch(`${API_URL}/api/course/${id}`, {
+        method: "GET",
+        credentials: "include",
+    });
+    return (await response.json()).course;
 }

@@ -1,12 +1,14 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "../components/Login.vue";
 import CoursesMenu from "../components/CoursesMenu.vue";
+import Course from "../components/Course.vue";
 import { checkAuth } from "../api/checkAuth.js";
 
 const routes = [
     { path: "/", redirect: "/login" },
     { path: "/login", component: Login, meta: { login: true } },
     { path: "/courses", component: CoursesMenu, meta: { requiresAuth: true } },
+    { path: "/courses/:id", component: Course, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({

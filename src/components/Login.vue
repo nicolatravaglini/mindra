@@ -16,6 +16,7 @@ async function handleLoginSuccess(response) {
 
     if (res.ok) {
         const data = await res.json();
+        userStore._id = data.user._id;
         userStore.name = data.user.name;
         userStore.picture = data.user.picture;
         router.push("/courses");

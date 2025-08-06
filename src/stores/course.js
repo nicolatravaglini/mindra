@@ -1,19 +1,19 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
-export const useUserStore = defineStore(
-    "user",
+export const useCourseStore = defineStore(
+    "course",
     () => {
         const _id = ref("");
         const name = ref("");
-        const picture = ref("");
+        const userId = ref("");
         function $reset() {
             _id.value = "";
             name.value = "";
-            picture.value = "";
+            userId.value = "";
         }
 
-        return { _id, name, picture, $reset };
+        return { _id, name, userId, $reset };
     },
     { persist: true },
 );

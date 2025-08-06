@@ -1,13 +1,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { addCourse, getCourses } from "../api/course.js";
+import { addCourse, getCourses, getCourse } from "../api/course.js";
 import { logout } from "../api/user.js";
 import { useUserStore } from "../stores/user.js";
-import { storeToRefs } from "pinia";
+import { useCourseStore } from "../stores/course.js";
 
 const router = useRouter();
 const userStore = useUserStore();
+const courseStore = useCourseStore();
 
 const courses = ref([]);
 const showForm = ref(false);
@@ -28,6 +29,14 @@ async function logoutAndLogin() {
     }
 }
 
+async function selectCourse(course) {
+    const c = await getCourse(course._id);
+    courseStore._id = c._id;
+    courseStore.name = c.name;
+    courseStore.userId = c.userId;
+    router.push(`/courses/${c._id}`);
+}
+
 onMounted(async () => {
     courses.value = await getCourses();
 });
@@ -39,9 +48,9 @@ onMounted(async () => {
             <div
                 class="container-fluid justify-content-end gap-3 align-items-center"
             >
-                <span class="fw-semibold d-none d-sm-block">{{
-                    userStore.name
-                }}</span>
+                <span class="fw-semibold d-none d-sm-block">
+                    {{ userStore.name }}
+                </span>
                 <div class="dropdown">
                     <img
                         :src="userStore.picture"
@@ -67,79 +76,69 @@ onMounted(async () => {
         </nav>
 
         <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <!-- Titolo -->
-                    <div class="text-center mb-4">
-                        <h3 class="fw-medium">
-                            {{
-                                courses.length
-                                    ? "Your courses"
-                                    : "No courses yet!"
-                            }}
-                        </h3>
-                    </div>
+            <!-- Title -->
+            <div class="mb-4">
+                <h2 class="fw-medium">
+                    {{ courses.length ? "Your courses" : "No courses yet!" }}
+                </h2>
+            </div>
 
-                    <!-- Elenco corsi -->
-                    <div class="d-grid gap-3 mb-4">
-                        <button
-                            v-for="course in courses"
-                            class="text-start px-4 py-3 border text-dark bg-white"
-                            style="
-                                font-size: 1.05rem;
-                                border-color: black;
-                                border-radius: 0.5rem;
-                            "
-                        >
-                            {{ course.name }}
-                        </button>
-                    </div>
+            <!-- List of courses -->
+            <div class="d-grid gap-3 mb-4">
+                <button
+                    v-for="course in courses"
+                    class="text-start px-4 py-3 border text-dark bg-white"
+                    style="
+                        font-size: 1.05rem;
+                        border-color: black;
+                        border-radius: 0.5rem;
+                    "
+                    @click="selectCourse(course)"
+                >
+                    {{ course.name }}
+                </button>
+            </div>
 
-                    <!-- Bottone per aggiunta -->
-                    <div class="text-center mb-4">
-                        <button
-                            v-if="!showForm"
-                            class="btn btn-outline-dark rounded-pill px-4"
-                            @click="showForm = true"
-                        >
-                            + Add a course
-                        </button>
-                    </div>
+            <!-- Button for adding courses -->
+            <div class="text-center mb-4">
+                <button
+                    v-if="!showForm"
+                    class="btn btn-outline-dark rounded-pill px-4"
+                    @click="showForm = true"
+                >
+                    + Add a course
+                </button>
+            </div>
 
-                    <!-- Form aggiunta corso -->
-                    <div
-                        v-if="showForm"
-                        class="p-4 border bg-white rounded"
-                        style="max-width: 500px; margin: 0 auto"
+            <!-- Form for adding courses -->
+            <div
+                v-if="showForm"
+                class="p-4 border bg-white rounded"
+                style="max-width: 500px; margin: 0 auto"
+            >
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-medium"
+                        >Course name</label
                     >
-                        <div class="mb-3">
-                            <label for="name" class="form-label fw-medium"
-                                >Course name</label
-                            >
-                            <input
-                                v-model="formCourse.name"
-                                type="text"
-                                class="form-control rounded"
-                                id="name"
-                                style="background-color: white"
-                            />
-                        </div>
+                    <input
+                        v-model="formCourse.name"
+                        type="text"
+                        class="form-control rounded"
+                        id="name"
+                        style="background-color: white"
+                    />
+                </div>
 
-                        <div class="d-flex justify-content-end gap-2">
-                            <button
-                                class="btn btn-dark rounded"
-                                @click="submitCourse"
-                            >
-                                Add
-                            </button>
-                            <button
-                                class="btn btn-outline-dark rounded"
-                                @click="showForm = false"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
+                <div class="d-flex justify-content-end gap-2">
+                    <button class="btn btn-dark rounded" @click="submitCourse">
+                        Add
+                    </button>
+                    <button
+                        class="btn btn-outline-dark rounded"
+                        @click="showForm = false"
+                    >
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>

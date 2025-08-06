@@ -30,4 +30,19 @@ router.get("/", isAuthenticated, async (req, res) => {
     }
 });
 
+router.get("/:id", isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const courseId = req.params.id;
+        const course = await Course.findOne({
+            userId: userId,
+            _id: courseId,
+        });
+        res.status(200).json({ course: course });
+    } catch (err) {
+        console.error("Error while fetching:", err);
+        res.status(500).json({ error: err });
+    }
+});
+
 export default router;

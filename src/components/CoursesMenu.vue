@@ -5,6 +5,7 @@ import { addCourse, getCourses, getCourse } from "../api/course.js";
 import { logout } from "../api/user.js";
 import { useUserStore } from "../stores/user.js";
 import { useCourseStore } from "../stores/course.js";
+import { useSectionLoader } from "../composables/useSectionLoader.js";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -14,9 +15,19 @@ const courses = ref([]);
 const showForm = ref(false);
 const formCourse = ref({ name: "" });
 
+// States
+const { isLoading: isLoadingCourses, load: loadCourses } =
+    useSectionLoader("courses");
+
+async function downloadCourses() {
+    loadCourses(async () => {
+        courses.value = await getCourses();
+    });
+}
+
 async function submitCourse() {
     const data = await addCourse(formCourse.value);
-    courses.value = await getCourses();
+    await downloadCourses();
     showForm.value = false;
     formCourse.value = { name: "" };
 }
@@ -38,7 +49,7 @@ async function selectCourse(course) {
 }
 
 onMounted(async () => {
-    courses.value = await getCourses();
+    await downloadCourses();
 });
 </script>
 
@@ -85,7 +96,11 @@ onMounted(async () => {
 
             <!-- List of courses -->
             <div class="d-grid gap-3 mb-4">
+                <div v-if="isLoadingCourses">
+                    <div class="spinner-border" role="status"></div>
+                </div>
                 <button
+                    v-else
                     v-for="course in courses"
                     class="text-start px-4 py-3 border text-dark bg-white"
                     style="

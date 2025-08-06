@@ -8,6 +8,7 @@ import {
     addMaterialsToCourse,
     deleteMaterialFromCourseById,
 } from "../api/material.js";
+import { useSectionLoader } from "../composables/useSectionLoader.js";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -17,6 +18,10 @@ const courseStore = useCourseStore();
 const supportedExtensions = ["txt", "md"];
 const files = ref([]);
 const fileInput = ref(null);
+
+// States
+const { isLoading: isLoadingFiles, load: loadFiles } =
+    useSectionLoader("files");
 
 function readFileAsText(file) {
     // NOTE: they're all considered plain text files...
@@ -31,7 +36,9 @@ function readFileAsText(file) {
 }
 
 async function downloadFiles() {
-    files.value = await getMaterialsFromCourseById(courseStore._id);
+    loadFiles(async () => {
+        files.value = await getMaterialsFromCourseById(courseStore._id);
+    });
 }
 
 async function uploadFiles(fileList) {
@@ -163,14 +170,19 @@ onMounted(async () => {
             <!-- Show materials -->
             <div class="mb-4 border rounded p-4 bg-white text-dark min-vh-25">
                 <h5 class="mb-3">Materiale caricato</h5>
-                <ul class="list-unstyled">
+
+                <div v-if="isLoadingFiles">
+                    <div class="spinner-border" role="status"></div>
+                </div>
+                <ul v-else class="list-unstyled">
                     <li v-for="(file, index) in files" :key="index">
                         {{ file.fileName }}
                     </li>
                     <li v-if="files.length === 0" class="text-muted">
-                        Nessun file caricato.
+                        No files.
                     </li>
                 </ul>
+
                 <button
                     v-if="files.length > 0"
                     class="btn btn-dark"

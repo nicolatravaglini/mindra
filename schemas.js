@@ -12,6 +12,19 @@ const CourseSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     name: String,
     materialIds: [{ type: Schema.Types.ObjectId, ref: "Material" }],
+    course: [
+        {
+            title: String,
+            description: String,
+            micro: [
+                {
+                    title: String,
+                    description: String,
+                    quizzes: [String],
+                },
+            ],
+        },
+    ],
 });
 
 const MaterialSchema = new Schema({

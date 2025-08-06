@@ -27,3 +27,11 @@ export async function getCourse(id) {
     });
     return (await response.json()).course;
 }
+
+export async function generateCourse(id) {
+    const response = await fetch(`${API_URL}/api/course/${id}/generate`, {
+        method: "GET",
+        credentials: "include",
+    });
+    return (await response.json()).gen;
+}

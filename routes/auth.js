@@ -3,8 +3,6 @@ import { promisify } from "util";
 import { User } from "../schemas.js";
 import { OAuth2Client } from "google-auth-library";
 import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
 
 dotenv.config();
 

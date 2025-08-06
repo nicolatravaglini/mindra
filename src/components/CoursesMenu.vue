@@ -6,6 +6,7 @@ import { logout } from "../api/user.js";
 import { useUserStore } from "../stores/user.js";
 import { useCourseStore } from "../stores/course.js";
 import { useSectionLoader } from "../composables/useSectionLoader.js";
+import Navbar from "./Navbar.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -32,19 +33,9 @@ async function submitCourse() {
     formCourse.value = { name: "" };
 }
 
-async function logoutAndLogin() {
-    const response = await logout();
-    if (response.ok) {
-        userStore.$reset();
-        router.push("/login");
-    }
-}
-
 async function selectCourse(course) {
     const c = await getCourse(course._id);
-    courseStore._id = c._id;
-    courseStore.name = c.name;
-    courseStore.userId = c.userId;
+    courseStore.set(c);
     router.push(`/courses/${c._id}`);
 }
 
@@ -55,38 +46,9 @@ onMounted(async () => {
 
 <template>
     <div class="container-fluid">
-        <nav class="navbar navbar-expand">
-            <div
-                class="container-fluid justify-content-end gap-3 align-items-center"
-            >
-                <span class="fw-semibold d-none d-sm-block">
-                    {{ userStore.name }}
-                </span>
-                <div class="dropdown">
-                    <img
-                        :src="userStore.picture"
-                        alt="User avatar"
-                        class="rounded-circle dropdown-toggle"
-                        width="40"
-                        height="40"
-                        style="object-fit: cover"
-                        data-bs-toggle="dropdown"
-                    />
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <button
-                                class="dropdown-item"
-                                @click="logoutAndLogin"
-                            >
-                                Logout
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <Navbar />
 
-        <div class="container py-5">
+        <div class="container pt-5">
             <!-- Title -->
             <div class="mb-4">
                 <h2 class="fw-medium">
@@ -96,7 +58,7 @@ onMounted(async () => {
 
             <!-- List of courses -->
             <div class="d-grid gap-3 mb-4">
-                <div v-if="isLoadingCourses">
+                <div v-if="isLoadingCourses" class="text-center">
                     <div class="spinner-border" role="status"></div>
                 </div>
                 <button

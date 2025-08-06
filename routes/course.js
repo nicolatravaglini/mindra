@@ -1,6 +1,7 @@
 import express from "express";
 import isAuthenticated from "./isAuth.js";
-import { Course } from "../schemas.js";
+import { Course, Material } from "../schemas.js";
+import { generateCourse } from "../services/aiService.js";
 
 const router = express.Router();
 
@@ -38,6 +39,25 @@ router.get("/:id", isAuthenticated, async (req, res) => {
             _id: courseId,
         });
         res.status(200).json({ course: course });
+    } catch (err) {
+        console.error("Error while fetching:", err);
+        res.status(500).json({ error: err });
+    }
+});
+
+router.get("/:id/generate", isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const courseId = req.params.id;
+        const course = await Course.findOne({
+            userId: userId,
+            _id: courseId,
+        });
+        const materialIds = course.materialIds;
+        const materials = await Material.find({ _id: { $in: materialIds } });
+        const gen = JSON.parse(await generateCourse(materials));
+        await Course.updateOne({ _id: courseId }, { $set: { course: gen } });
+        res.status(200).json({ gen: gen });
     } catch (err) {
         console.error("Error while fetching:", err);
         res.status(500).json({ error: err });

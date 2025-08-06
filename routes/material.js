@@ -25,10 +25,8 @@ router.post("/toCourse", isAuthenticated, async (req, res) => {
         const courseId = req.query.courseId;
         const userId = req.session.userId;
         let body = req.body;
-        console.log(body);
         if (!body) return res.status(400).json({ error: "Invalid body" });
         body = body.map((mat) => ({ ...mat, userId: userId }));
-        console.log(body);
         const newMaterials = await Material.insertMany(body);
         console.log("Insertion completed:", newMaterials);
         const updatedCourse = await Course.updateOne(
@@ -53,10 +51,8 @@ router.get("/fromCourse", isAuthenticated, async (req, res) => {
     try {
         const courseId = req.query.courseId;
         const course = await Course.findOne({ _id: courseId });
-        console.log(course);
         const materialIds = course.materialIds;
         const allMaterials = await Material.find({ _id: { $in: materialIds } });
-        console.log(allMaterials);
         res.status(200).json({ materials: allMaterials });
     } catch (err) {
         console.error("Error while fetching:", err);
@@ -90,7 +86,7 @@ router.delete("/:id/fromCourse", isAuthenticated, async (req, res) => {
         const materialId = req.params.id;
         const updatedCourse = await Course.updateOne(
             { _id: courseId },
-            { $pull: { materialsId: materialId } },
+            { $pull: { materialIds: materialId } },
         );
         console.log("Update completed:", updatedCourse);
         res.status(200).send();

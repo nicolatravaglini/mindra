@@ -58,8 +58,10 @@ async function uploadFiles(fileList) {
     await downloadFiles();
 }
 
-async function deleteFile(id) {
-    await deleteMaterialFromCourseById(id);
+async function deleteFile(index) {
+    const id = files.value[index]._id;
+    await deleteMaterialFromCourseById(id, courseStore._id);
+    await downloadFiles();
 }
 
 function triggerFileInput() {
@@ -99,6 +101,18 @@ async function logoutAndLogin() {
     if (response.ok) {
         userStore.$reset();
         router.push("/login");
+    }
+}
+
+function getFileIconClass(fileName) {
+    const ext = fileName.toLowerCase().split(".").pop();
+    switch (ext) {
+        case "txt":
+            return "bi bi-file-earmark-text";
+        case "md":
+            return "bi bi-markdown";
+        default:
+            return "bi bi-file-earmark";
     }
 }
 
@@ -174,14 +188,43 @@ onMounted(async () => {
                 <div v-if="isLoadingFiles">
                     <div class="spinner-border" role="status"></div>
                 </div>
-                <ul v-else class="list-unstyled">
-                    <li v-for="(file, index) in files" :key="index">
-                        {{ file.fileName }}
-                    </li>
-                    <li v-if="files.length === 0" class="text-muted">
+
+                <div v-else>
+                    <div v-if="files.length === 0" class="text-muted">
                         No files.
-                    </li>
-                </ul>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-3">
+                        <div
+                            v-for="(file, index) in files"
+                            :key="index"
+                            class="position-relative border rounded p-3 bg-light text-dark d-flex flex-column align-items-start"
+                            style="width: 180px; height: 100px"
+                        >
+                            <!-- Icon + name -->
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i
+                                    :class="getFileIconClass(file.fileName)"
+                                    class="fs-4"
+                                ></i>
+                                <span
+                                    class="text-truncate small"
+                                    style="max-width: 110px"
+                                >
+                                    {{ file.fileName }}
+                                </span>
+                            </div>
+
+                            <!-- Button for removing -->
+                            <button
+                                type="button"
+                                class="btn-close position-absolute top-0 end-0 m-2"
+                                aria-label="Close"
+                                @click="deleteFile(index)"
+                            ></button>
+                        </div>
+                    </div>
+                </div>
 
                 <button
                     v-if="files.length > 0"

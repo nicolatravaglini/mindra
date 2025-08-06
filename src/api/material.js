@@ -26,10 +26,13 @@ export async function addMaterialsToCourse(id, materials) {
     return await response;
 }
 
-export async function deleteMaterialFromCourseById(id) {
-    const response = await fetch(`${API_URL}/api/material/${id}/fromCourse`, {
-        method: "DELETE",
-        credentials: "include",
-    });
+export async function deleteMaterialFromCourseById(materialId, courseId) {
+    const response = await fetch(
+        `${API_URL}/api/material/${materialId}/fromCourse?courseId=${courseId}`,
+        {
+            method: "DELETE",
+            credentials: "include",
+        },
+    );
     return await response;
 }

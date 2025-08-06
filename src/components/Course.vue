@@ -183,7 +183,7 @@ onMounted(async () => {
 
             <!-- Show materials -->
             <div class="mb-4 border rounded p-4 bg-white text-dark min-vh-25">
-                <h5 class="mb-3">Materiale caricato</h5>
+                <h5 class="mb-3">Material loaded</h5>
 
                 <div v-if="isLoadingFiles">
                     <div class="spinner-border" role="status"></div>
@@ -199,10 +199,10 @@ onMounted(async () => {
                             v-for="(file, index) in files"
                             :key="index"
                             class="position-relative border rounded p-3 bg-light text-dark d-flex flex-column align-items-start"
-                            style="width: 180px; height: 100px"
+                            style="width: 180px; height: 75px"
                         >
                             <!-- Icon + name -->
-                            <div class="d-flex align-items-center gap-2 mb-2">
+                            <div class="d-flex align-items-center gap-2">
                                 <i
                                     :class="getFileIconClass(file.fileName)"
                                     class="fs-4"

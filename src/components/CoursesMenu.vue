@@ -2,7 +2,6 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { addCourse, getCourses, getCourse } from "../api/course.js";
-import { logout } from "../api/user.js";
 import { useUserStore } from "../stores/user.js";
 import { useCourseStore } from "../stores/course.js";
 import { useSectionLoader } from "../composables/useSectionLoader.js";

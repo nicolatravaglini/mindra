@@ -28,6 +28,14 @@ export async function getCourse(id) {
     return (await response.json()).course;
 }
 
+export async function deleteCourseById(id) {
+    const response = await fetch(`${API_URL}/api/course/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+    });
+    return await response;
+}
+
 export async function generateCourse(id) {
     const response = await fetch(`${API_URL}/api/course/${id}/generate`, {
         method: "GET",

@@ -45,6 +45,21 @@ router.get("/:id", isAuthenticated, async (req, res) => {
     }
 });
 
+router.delete("/:id", isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const courseId = req.params.id;
+        await Course.deleteOne({
+            userId: userId,
+            _id: courseId,
+        });
+        res.status(200).send();
+    } catch (err) {
+        console.error("Error while fetching:", err);
+        res.status(500).json({ error: err });
+    }
+});
+
 router.get("/:id/generate", isAuthenticated, async (req, res) => {
     try {
         const userId = req.session.userId;

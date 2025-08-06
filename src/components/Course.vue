@@ -1,13 +1,16 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user.js";
 import { useCourseStore } from "../stores/course.js";
 import { useMaterialsStore } from "../stores/material.js";
-import { getCourse, generateCourse } from "../api/course.js";
+import { getCourse, deleteCourseById, generateCourse } from "../api/course.js";
 import { useSectionLoader } from "../composables/useSectionLoader.js";
 import CourseMaterialView from "./CourseMaterialView.vue";
 import CourseView from "./CourseView.vue";
 import Navbar from "./Navbar.vue";
+
+const router = useRouter();
 
 // Stores
 const userStore = useUserStore();
@@ -25,6 +28,13 @@ const { isLoading: isGeneratingCourse, load: genCourseLoader } =
 async function refreshCourse() {
     const fresh = await getCourse(courseStore._id);
     courseStore.set(fresh);
+}
+
+async function deleteCourse() {
+    await deleteCourseById(courseStore._id);
+    materialsStore.$reset();
+    courseStore.$reset();
+    router.push("/courses");
 }
 
 async function generate() {
@@ -45,8 +55,26 @@ onMounted(async () => {
 
         <div class="container pt-5">
             <!-- Name of the course -->
-            <div class="mb-4">
-                <h1>{{ courseStore.name }}</h1>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="mb-4">
+                    <h1>{{ courseStore.name }}</h1>
+                </div>
+
+                <div class="dropdown">
+                    <button
+                        class="btn rounded dropdown-toggle"
+                        data-bs-toggle="dropdown"
+                    >
+                        <i class="bi bi-gear"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <button class="dropdown-item" @click="deleteCourse">
+                                Delete
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <CourseMaterialView />

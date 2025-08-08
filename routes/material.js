@@ -60,12 +60,23 @@ router.get("/fromCourse", isAuthenticated, async (req, res) => {
     }
 });
 
+router.get("/fromUser", isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const allMaterials = await Material.find({ userId: userId });
+        res.status(200).json({ materials: allMaterials });
+    } catch (err) {
+        console.error("Error while fetching:", err);
+        res.status(500).json({ error: err });
+    }
+});
+
 // Delete the material globally
 router.delete("/:id", isAuthenticated, async (req, res) => {
     try {
         const materialId = req.params.id;
         await Material.deleteOne({ _id: materialId });
-        await Course.update(
+        await Course.updateMany(
             {},
             {
                 $pull: { materialIds: materialId },

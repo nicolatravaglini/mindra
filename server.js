@@ -63,3 +63,8 @@ app.use(express.static("dist"));
 app.listen(port, () => {
     console.log("Server listening...");
 });
+
+process.on("SIGINT", async () => {
+    await mongoose.connection.close();
+    process.exit(0);
+});

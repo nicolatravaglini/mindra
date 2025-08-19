@@ -91,7 +91,7 @@ function handleFileSelect(event) {
     Array.from(event.target.files).forEach((file) => {
         const extension = file.name.toLowerCase().split(".").pop();
         if (!supportedExtensions.includes(extension)) {
-            console.log("File", file.name, "non supported yet!");
+            console.log("File", file.name, "not supported yet!");
         } else {
             validFiles.push(file);
         }
@@ -119,79 +119,109 @@ onMounted(async () => {
 
 <template>
     <!-- Show materials -->
-    <div class="mb-4 border rounded p-4 bg-white text-dark min-vh-25">
-        <h5 class="mb-3">Materials loaded</h5>
-
-        <div v-if="isLoadingFiles">
-            <div class="spinner-border" role="status"></div>
-        </div>
-
-        <div v-else>
-            <div
-                v-if="materialsStore.materials.length === 0"
-                class="text-muted"
-            >
-                No files.
-            </div>
-
-            <div class="d-flex flex-wrap gap-3">
-                <div
-                    v-for="(file, index) in materialsStore.materials"
-                    :key="index"
-                    class="position-relative border rounded p-3 bg-light text-dark d-flex flex-column align-items-start"
-                    style="width: 180px; height: 75px"
+    <div class="accordion mb-3" id="accordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#materialAccordion"
                 >
-                    <!-- Icon + name -->
-                    <div class="d-flex align-items-center gap-2">
-                        <i
-                            :class="getFileIconClass(file.fileName)"
-                            class="fs-4"
-                        ></i>
-                        <span
-                            class="text-truncate small"
-                            style="max-width: 110px"
-                        >
-                            {{ file.fileName }}
-                        </span>
+                    Materials loaded
+                </button>
+            </h2>
+
+            <div
+                id="materialAccordion"
+                :class="[
+                    'accordion-collapse',
+                    'collapse',
+                    courseStore.course.length == 0 ? 'show' : '',
+                ]"
+                data-bs-parent="#accordion"
+            >
+                <div class="accordion-body">
+                    <div v-if="isLoadingFiles">
+                        <div class="spinner-border" role="status"></div>
                     </div>
 
-                    <!-- Button for removing -->
-                    <button
-                        type="button"
-                        class="btn-close position-absolute top-0 end-0 m-2"
-                        aria-label="Close"
-                        @click="deleteFile(index)"
-                    ></button>
+                    <div v-else>
+                        <div
+                            v-if="materialsStore.materials.length === 0"
+                            class="text-muted"
+                        >
+                            No files.
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-3">
+                            <div
+                                v-for="(
+                                    file, index
+                                ) in materialsStore.materials"
+                                :key="index"
+                                class="position-relative border rounded p-3 bg-light text-dark d-flex flex-column align-items-start"
+                                style="width: 180px; height: 75px"
+                            >
+                                <!-- Icon + name -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <i
+                                        :class="getFileIconClass(file.fileName)"
+                                        class="fs-4"
+                                    ></i>
+                                    <span
+                                        class="text-truncate small"
+                                        style="max-width: 110px"
+                                    >
+                                        {{ file.fileName }}
+                                    </span>
+                                </div>
+
+                                <!-- Button for removing -->
+                                <button
+                                    type="button"
+                                    class="btn-close position-absolute top-0 end-0 m-2"
+                                    aria-label="Close"
+                                    @click="deleteFile(index)"
+                                ></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dropzone -->
+                    <div
+                        class="border rounded mt-3 p-5 text-center bg-light"
+                        @dragover.prevent
+                        @dragenter.prevent
+                        @drop.prevent="handleDrop"
+                        @click="triggerFileInput"
+                        style="cursor: pointer"
+                    >
+                        <p class="mb-0 text-muted">
+                            Drag and drop here the materials or click to insert
+                            them.
+                        </p>
+                        <p class="mb-0 text-muted">
+                            (note: the supported extensions are
+                            {{ supportedExtensions.join(", ") }})
+                        </p>
+
+                        <input
+                            ref="fileInput"
+                            type="file"
+                            :accept="
+                                supportedExtensions
+                                    .map((ext) => '.' + ext)
+                                    .join(',')
+                            "
+                            multiple
+                            class="d-none"
+                            @change="handleFileSelect"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Dropzone -->
-    <div
-        class="border rounded p-5 text-center bg-light"
-        @dragover.prevent
-        @dragenter.prevent
-        @drop.prevent="handleDrop"
-        @click="triggerFileInput"
-        style="cursor: pointer"
-    >
-        <p class="mb-0 text-muted">
-            Drag and drop here the materials or click to insert them.
-        </p>
-        <p class="mb-0 text-muted">
-            (note: the supported extensions are
-            {{ supportedExtensions.join(", ") }})
-        </p>
-
-        <input
-            ref="fileInput"
-            type="file"
-            :accept="supportedExtensions.map((ext) => '.' + ext).join(',')"
-            multiple
-            class="d-none"
-            @change="handleFileSelect"
-        />
     </div>
 </template>
 

@@ -25,6 +25,10 @@ const CourseSchema = new Schema({
             ],
         },
     ],
+    progress: {
+        macroIndex: Number,
+        microIndex: Number,
+    },
 });
 
 const MaterialSchema = new Schema({

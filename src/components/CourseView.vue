@@ -5,6 +5,13 @@ const courseStore = useCourseStore();
 
 <template>
     <div class="container my-4">
+        <!-- Progress -->
+        <div>
+            ciao
+            {{ courseStore.progress.macroIndex }}
+            {{ courseStore.progress.microIndex }}
+        </div>
+
         <div class="accordion" id="courseAccordion">
             <div
                 class="accordion-item"

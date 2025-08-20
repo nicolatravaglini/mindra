@@ -9,6 +9,7 @@ export const useCourseStore = defineStore(
         const userId = ref("");
         const materialIds = ref([]);
         const course = ref([]);
+        const progress = ref({});
 
         function $reset() {
             _id.value = "";
@@ -16,13 +17,23 @@ export const useCourseStore = defineStore(
             userId.value = "";
             materialIds.value = [];
             course.value = [];
+            progress.value = {};
         }
 
         function set(data) {
             Object.assign(this, data);
         }
 
-        return { _id, name, userId, materialIds, course, $reset, set };
+        return {
+            _id,
+            name,
+            userId,
+            materialIds,
+            course,
+            progress,
+            $reset,
+            set,
+        };
     },
     { persist: true },
 );

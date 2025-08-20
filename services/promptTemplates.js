@@ -24,5 +24,7 @@ Respond in JSON format following this schema:
     ]
   }
 ]
-  `.trim();
+
+Do not use Latex in strings.
+`.trim();
 }

@@ -70,11 +70,20 @@ router.get("/:id/generate", isAuthenticated, async (req, res) => {
         });
         const materialIds = course.materialIds;
         const materials = await Material.find({ _id: { $in: materialIds } });
-        const gen = JSON.parse(await generateCourse(materials));
-        await Course.updateOne({ _id: courseId }, { $set: { course: gen } });
-        res.status(200).json({ gen: gen });
+        const gen = await generateCourse(materials);
+        const genJson = JSON.parse(gen);
+        await Course.updateOne(
+            { _id: courseId },
+            {
+                $set: {
+                    course: genJson,
+                    progress: { macroIndex: 0, microIndex: 0 },
+                },
+            },
+        );
+        res.status(200).json({ gen: genJson });
     } catch (err) {
-        console.error("Error while fetching:", err);
+        console.error("Error while generating:", err);
         res.status(500).json({ error: err });
     }
 });

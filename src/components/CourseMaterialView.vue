@@ -26,6 +26,8 @@ const fileInput = ref(null);
 // States
 const { isLoading: isLoadingFiles, load: loadFiles } =
     useSectionLoader("files");
+const { isLoading: isGeneratingCourse, load: genCourseLoader } =
+    useSectionLoader("genCourse");
 
 function readFileAsText(file) {
     // NOTE: they're all considered plain text files...
@@ -112,6 +114,13 @@ function getFileIconClass(fileName) {
     }
 }
 
+async function generate() {
+    genCourseLoader(async () => {
+        await generateCourse(courseStore._id);
+        await refreshCourse();
+    });
+}
+
 onMounted(async () => {
     await refreshMaterials();
 });
@@ -123,12 +132,12 @@ onMounted(async () => {
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button
-                    class="accordion-button"
+                    class="accordion-button bg-transparent fs-4"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#materialAccordion"
                 >
-                    Materials loaded
+                    Materials
                 </button>
             </h2>
 
@@ -218,6 +227,24 @@ onMounted(async () => {
                             class="d-none"
                             @change="handleFileSelect"
                         />
+                    </div>
+
+                    <!-- Generate course button -->
+                    <div class="text-center mt-4">
+                        <button
+                            :disabled="
+                                materialsStore.materials.length === 0 ||
+                                isGeneratingCourse
+                            "
+                            class="btn btn-dark rounded-pill"
+                            @click="generate"
+                        >
+                            Generate course
+                        </button>
+                    </div>
+
+                    <div v-if="isGeneratingCourse" class="text-center mt-3">
+                        <div class="spinner-border" role="status"></div>
                     </div>
                 </div>
             </div>

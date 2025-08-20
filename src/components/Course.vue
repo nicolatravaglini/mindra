@@ -21,10 +21,6 @@ const materialsStore = useMaterialsStore();
 const supportedExtensions = ["txt", "md"];
 const fileInput = ref(null);
 
-// States
-const { isLoading: isGeneratingCourse, load: genCourseLoader } =
-    useSectionLoader("genCourse");
-
 async function refreshCourse() {
     const fresh = await getCourse(courseStore._id);
     courseStore.set(fresh);
@@ -35,13 +31,6 @@ async function deleteCourse() {
     materialsStore.$reset();
     courseStore.$reset();
     router.push("/courses");
-}
-
-async function generate() {
-    genCourseLoader(async () => {
-        await generateCourse(courseStore._id);
-        await refreshCourse();
-    });
 }
 
 onMounted(async () => {
@@ -81,24 +70,7 @@ onMounted(async () => {
         </div>
 
         <div class="container pt-3">
-            <div class="text-center">
-                <button
-                    :disabled="
-                        materialsStore.materials.length === 0 ||
-                        isGeneratingCourse
-                    "
-                    class="btn btn-dark rounded-pill"
-                    @click="generate"
-                >
-                    Generate course
-                </button>
-            </div>
-
-            <div v-if="isGeneratingCourse" class="text-center py-3">
-                <div class="spinner-border" role="status"></div>
-            </div>
-
-            <div v-else-if="courseStore.course.length > 0">
+            <div v-if="courseStore.course.length > 0">
                 <CourseView />
             </div>
         </div>

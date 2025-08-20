@@ -2,13 +2,12 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { addCourse, getCourses, getCourse } from "../api/course.js";
-import { useUserStore } from "../stores/user.js";
 import { useCourseStore } from "../stores/course.js";
 import { useSectionLoader } from "../composables/useSectionLoader.js";
 import Navbar from "./Navbar.vue";
+import Loader from "./Loader.vue";
 
 const router = useRouter();
-const userStore = useUserStore();
 const courseStore = useCourseStore();
 
 const courses = ref([]);
@@ -57,22 +56,20 @@ onMounted(async () => {
 
             <!-- List of courses -->
             <div class="d-grid gap-3 mb-4">
-                <div v-if="isLoadingCourses" class="text-center">
-                    <div class="spinner-border" role="status"></div>
-                </div>
-                <button
-                    v-else
-                    v-for="course in courses"
-                    class="text-start px-4 py-3 border text-dark bg-white"
-                    style="
-                        font-size: 1.05rem;
-                        border-color: black;
-                        border-radius: 0.5rem;
-                    "
-                    @click="selectCourse(course)"
-                >
-                    {{ course.name }}
-                </button>
+                <Loader :isLoading="isLoadingCourses">
+                    <button
+                        v-for="course in courses"
+                        class="text-start px-4 py-3 border text-dark bg-white"
+                        style="
+                            font-size: 1.05rem;
+                            border-color: black;
+                            border-radius: 0.5rem;
+                        "
+                        @click="selectCourse(course)"
+                    >
+                        {{ course.name }}
+                    </button>
+                </Loader>
             </div>
 
             <!-- Button for adding courses -->

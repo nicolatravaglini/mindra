@@ -12,6 +12,7 @@ import {
 import { getCourse, generateCourse } from "../api/course.js";
 import { useSectionLoader } from "../composables/useSectionLoader.js";
 import FileList from "./FileList.vue";
+import Loader from "./Loader.vue";
 
 const router = useRouter();
 
@@ -64,8 +65,6 @@ async function uploadFiles(fileList) {
             content: content,
         });
     }
-
-    console.log(materials);
 
     await addMaterialsToCourse(courseStore._id, materials);
     await refreshCourse();
@@ -140,15 +139,12 @@ onMounted(async () => {
                 data-bs-parent="#accordion"
             >
                 <div class="accordion-body">
-                    <div v-if="isLoadingFiles">
-                        <div class="spinner-border" role="status"></div>
-                    </div>
-
-                    <FileList
-                        v-else
-                        :fileList="materialsStore.materials"
-                        :deleteFile="deleteFile"
-                    />
+                    <Loader :isLoading="isLoadingFiles">
+                        <FileList
+                            :fileList="materialsStore.materials"
+                            :deleteFile="deleteFile"
+                        />
+                    </Loader>
 
                     <!-- Dropzone -->
                     <div

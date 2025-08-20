@@ -69,11 +69,7 @@ onMounted(async () => {
             <CourseMaterialView />
         </div>
 
-        <div class="container pt-3">
-            <div v-if="courseStore.course.length > 0">
-                <CourseView />
-            </div>
-        </div>
+        <CourseView v-if="courseStore.course.length > 0" />
     </div>
 </template>
 

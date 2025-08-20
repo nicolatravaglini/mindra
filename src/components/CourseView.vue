@@ -1,18 +1,30 @@
 <script setup>
+import { computed } from "vue";
 import { useCourseStore } from "../stores/course.js";
+
+// Stores
 const courseStore = useCourseStore();
+const progPerc = computed(
+    () =>
+        ((courseStore.progress.macroIndex + courseStore.progress.microIndex) *
+            100) /
+        (courseStore.course.length +
+            courseStore.course.reduce((acc, current) => {
+                return acc + current.micro.length;
+            }, 0)),
+);
 </script>
 
 <template>
-    <div class="container my-4">
+    <div class="container mt-5">
         <!-- Progress -->
-        <div>
-            ciao
-            {{ courseStore.progress.macroIndex }}
-            {{ courseStore.progress.microIndex }}
+        <div class="progress">
+            <div class="progress-bar" :style="{ width: progPerc }">
+                {{ progPerc }}%
+            </div>
         </div>
 
-        <div class="accordion" id="courseAccordion">
+        <div class="accordion mt-3" id="courseAccordion">
             <div
                 class="accordion-item"
                 v-for="(macro, i) in courseStore.course"

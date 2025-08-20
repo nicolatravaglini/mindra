@@ -11,6 +11,7 @@ import {
 } from "../api/material.js";
 import { getCourse, generateCourse } from "../api/course.js";
 import { useSectionLoader } from "../composables/useSectionLoader.js";
+import FileList from "./FileList.vue";
 
 const router = useRouter();
 
@@ -102,18 +103,6 @@ function handleFileSelect(event) {
     uploadFiles(validFiles);
 }
 
-function getFileIconClass(fileName) {
-    const ext = fileName.toLowerCase().split(".").pop();
-    switch (ext) {
-        case "txt":
-            return "bi bi-file-earmark-text";
-        case "md":
-            return "bi bi-markdown";
-        default:
-            return "bi bi-file-earmark";
-    }
-}
-
 async function generate() {
     genCourseLoader(async () => {
         await generateCourse(courseStore._id);
@@ -155,47 +144,11 @@ onMounted(async () => {
                         <div class="spinner-border" role="status"></div>
                     </div>
 
-                    <div v-else>
-                        <div
-                            v-if="materialsStore.materials.length === 0"
-                            class="text-muted"
-                        >
-                            No files.
-                        </div>
-
-                        <div class="d-flex flex-wrap gap-3">
-                            <div
-                                v-for="(
-                                    file, index
-                                ) in materialsStore.materials"
-                                :key="index"
-                                class="position-relative border rounded p-3 bg-light text-dark d-flex flex-column align-items-start"
-                                style="width: 180px; height: 75px"
-                            >
-                                <!-- Icon + name -->
-                                <div class="d-flex align-items-center gap-2">
-                                    <i
-                                        :class="getFileIconClass(file.fileName)"
-                                        class="fs-4"
-                                    ></i>
-                                    <span
-                                        class="text-truncate small"
-                                        style="max-width: 110px"
-                                    >
-                                        {{ file.fileName }}
-                                    </span>
-                                </div>
-
-                                <!-- Button for removing -->
-                                <button
-                                    type="button"
-                                    class="btn-close position-absolute top-0 end-0 m-2"
-                                    aria-label="Close"
-                                    @click="deleteFile(index)"
-                                ></button>
-                            </div>
-                        </div>
-                    </div>
+                    <FileList
+                        v-else
+                        :fileList="materialsStore.materials"
+                        :deleteFile="deleteFile"
+                    />
 
                     <!-- Dropzone -->
                     <div

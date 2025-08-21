@@ -5,6 +5,17 @@ import { useCourseStore } from "../stores/course.js";
 // Stores
 const courseStore = useCourseStore();
 
+const estimatedTotalPomodoros = computed(() =>
+    courseStore.course.reduce(
+        (acc1, macro) =>
+            acc1 +
+            macro.micro.reduce(
+                (acc2, current) => acc2 + current.estimatedPomodoros,
+                0,
+            ),
+        0,
+    ),
+);
 const progPerc = computed(
     () =>
         ((courseStore.progress.macroIndex + courseStore.progress.microIndex) *
@@ -37,10 +48,20 @@ function showMicro(i, j) {}
 
 <template>
     <div class="container mt-5">
-        <h3>Course - {{ progPerc.toFixed(1) }}%</h3>
+        <h3>Course</h3>
+
+        <!-- Info -->
+        <div>
+            Estimated total pomodoros:
+            <span class="fw-bold">{{ estimatedTotalPomodoros }}</span>
+            <i class="bi bi-stopwatch"></i>
+            <br />
+            Completion percentage:
+            <span class="fw-bold">{{ progPerc.toFixed(1) }}%</span>
+        </div>
 
         <!-- Progress -->
-        <div class="progress" style="height: 3px">
+        <div class="progress mt-2" style="height: 3px">
             <div
                 class="progress-bar bg-dark"
                 :style="{ width: progPerc + '%' }"
@@ -84,9 +105,17 @@ function showMicro(i, j) {}
                             </div>
 
                             <!-- Description -->
-                            <div class="flex-grow-1 text-start my-3">
-                                <span class="fw-bold">Description: </span>
-                                {{ micro.description }}
+                            <div
+                                class="flex-grow-1 text-start my-3 d-flex flex-column justify-content-between align-items-start"
+                            >
+                                <div>
+                                    <span class="fw-bold">Description: </span>
+                                    {{ micro.description }}
+                                </div>
+                                <div class="fst-italic">
+                                    {{ micro.estimatedPomodoros }}
+                                    <span><i class="bi bi-stopwatch"></i></span>
+                                </div>
                             </div>
 
                             <!-- Play button -->

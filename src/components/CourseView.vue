@@ -17,7 +17,7 @@ const progPerc = computed(
 );
 const visibleMacro = ref({});
 
-function progTest(i) {
+function progTest(i, j) {
     courseStore.progress.macroIndex = i;
     courseStore.progress.microIndex = courseStore.course
         .slice(0, i)
@@ -25,12 +25,14 @@ function progTest(i) {
 }
 
 function showMacro(i) {
-    progTest(i);
+    progTest(i, 0);
     visibleMacro.value[i] = visibleMacro.value[i]
         ? !visibleMacro.value[i]
         : true;
     console.log(visibleMacro.value[i]);
 }
+
+function showMicro(i, j) {}
 </script>
 
 <template>
@@ -71,29 +73,31 @@ function showMacro(i) {
                         <div
                             v-for="(micro, j) in macro.micro"
                             :key="j"
-                            class="d-flex flex-row justify-content-start align-items-stretch bg-white text-dark text-center text-wrap border rounded-5 shadow-sm p-0 w-100 gap-3"
+                            class="d-flex flex-row align-items-stretch bg-white text-dark border rounded-5 shadow-sm p-0 w-100 gap-3 overflow-hidden"
                             style="min-height: 150px"
                         >
+                            <!-- Title -->
                             <div
-                                class="flex-shrink-0 d-flex justify-content-center align-items-center border-end fs-5 fw-bold p-1"
-                                style="width: 220px; overflow-wrap: break-word"
+                                class="flex-shrink-0 w-25 d-flex justify-content-center align-items-center border-end fs-5 fw-bold p-1 text-center text-break"
                             >
                                 {{ micro.title }}
                             </div>
 
+                            <!-- Description -->
                             <div class="flex-grow-1 text-start my-3">
                                 <span class="fw-bold">Description: </span>
                                 {{ micro.description }}
                             </div>
 
+                            <!-- Play button -->
                             <div
-                                class="flex-shrink-0 d-flex justify-content-center align-items-center"
+                                class="flex-shrink-0 w-25 d-flex justify-content-end align-items-center"
                             >
                                 <button
-                                    class="btn bg-dark text-white h-100"
-                                    style="aspect-ratio: 1/1"
+                                    class="btn bg-dark text-white w-50 h-100 rounded-0"
+                                    @click="showMicro(i, j)"
                                 >
-                                    <i class="bi bi-play-fill"></i>
+                                    <i class="bi bi-play h1"></i>
                                 </button>
                             </div>
                         </div>
@@ -101,67 +105,6 @@ function showMacro(i) {
                 </div>
             </div>
         </div>
-
-        <!--
-        <div class="accordion mt-3" id="courseAccordion">
-            <div
-                class="accordion-item"
-                v-for="(macro, i) in courseStore.course"
-                :key="i"
-            >
-                <h2 class="accordion-header" :id="`heading-${i}`">
-                    <button
-                        class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        :data-bs-target="`#collapse-${i}`"
-                        aria-expanded="false"
-                        :aria-controls="`collapse-${i}`"
-                        @click="test(i)"
-                    >
-                        {{ macro.title }}
-                    </button>
-                </h2>
-                <div
-                    :id="`collapse-${i}`"
-                    class="accordion-collapse collapse"
-                    :aria-labelledby="`heading-${i}`"
-                    data-bs-parent="#courseAccordion"
-                >
-                    <div class="accordion-body">
-                        <p>
-                            <strong>Description:</strong>
-                            {{ macro.description }}
-                        </p>
-
-                        <div
-                            class="card mb-3"
-                            v-for="(micro, j) in macro.micro"
-                            :key="j"
-                        >
-                            <div class="card-body">
-                                <h5 class="card-title">{{ micro.title }}</h5>
-                                <p class="card-text">{{ micro.description }}</p>
-
-                                <ul
-                                    v-if="micro.quizzes.length"
-                                    class="list-group list-group-flush"
-                                >
-                                    <li
-                                        v-for="(quiz, k) in micro.quizzes"
-                                        :key="k"
-                                        class="list-group-item"
-                                    >
-                                        {{ quiz }}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-		-->
     </div>
 </template>
 

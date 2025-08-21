@@ -55,7 +55,30 @@ router.delete("/:id", isAuthenticated, async (req, res) => {
         });
         res.status(200).send();
     } catch (err) {
-        console.error("Error while fetching:", err);
+        console.error("Error while deleting:", err);
+        res.status(500).json({ error: err });
+    }
+});
+
+router.delete("/:id/inner", isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const courseId = req.params.id;
+        await Course.updateOne(
+            {
+                userId: userId,
+                _id: courseId,
+            },
+            {
+                $unset: {
+                    course: [],
+                    progress: {},
+                },
+            },
+        );
+        res.status(200).send();
+    } catch (err) {
+        console.error("Error while deleting:", err);
         res.status(500).json({ error: err });
     }
 });

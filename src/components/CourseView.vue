@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useCourseStore } from "../stores/course.js";
+import { getCourse, deleteInnerCourseById } from "../api/course.js";
 
 // Stores
 const courseStore = useCourseStore();
@@ -44,20 +45,50 @@ function showMacro(i) {
 }
 
 function showMicro(i, j) {}
+
+async function deleteCourse() {
+    await deleteInnerCourseById(courseStore._id);
+    const fresh = await getCourse(courseStore._id);
+    courseStore.set(fresh);
+}
 </script>
 
 <template>
     <div class="container mt-5">
-        <h3>Course</h3>
+        <div class="d-flex flex-row justify-content-between align-items-start">
+            <div>
+                <h3>Course</h3>
 
-        <!-- Info -->
-        <div>
-            Estimated total pomodoros:
-            <span class="fw-bold">{{ estimatedTotalPomodoros }}</span>
-            <i class="bi bi-stopwatch"></i>
-            <br />
-            Completion percentage:
-            <span class="fw-bold">{{ progPerc.toFixed(1) }}%</span>
+                <!-- Info -->
+                <div>
+                    Estimated total pomodoros:
+                    <span class="fw-bold">{{ estimatedTotalPomodoros }}</span>
+                    <i class="bi bi-stopwatch"></i>
+                    <br />
+                    Completion percentage:
+                    <span class="fw-bold">{{ progPerc.toFixed(1) }}%</span>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button
+                    class="btn rounded dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                >
+                    <i class="bi bi-gear"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <button
+                            class="dropdown-item d-flex flex-row justify-content-between align-items-center"
+                            @click="deleteCourse"
+                        >
+                            Delete
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <!-- Progress -->

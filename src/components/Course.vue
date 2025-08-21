@@ -58,8 +58,12 @@ onMounted(async () => {
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
-                            <button class="dropdown-item" @click="deleteCourse">
+                            <button
+                                class="dropdown-item d-flex flex-row justify-content-between align-items-center"
+                                @click="deleteCourse"
+                            >
                                 Delete
+                                <i class="bi bi-trash"></i>
                             </button>
                         </li>
                     </ul>

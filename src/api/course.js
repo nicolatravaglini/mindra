@@ -36,6 +36,14 @@ export async function deleteCourseById(id) {
     return await response;
 }
 
+export async function deleteInnerCourseById(id) {
+    const response = await fetch(`${API_URL}/api/course/${id}/inner`, {
+        method: "DELETE",
+        credentials: "include",
+    });
+    return await response;
+}
+
 export async function generateCourse(id) {
     const response = await fetch(`${API_URL}/api/course/${id}/generate`, {
         method: "GET",

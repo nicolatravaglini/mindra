@@ -44,7 +44,7 @@ function showMacro(i) {
                     {{ macro.description }}
                 </div>
                 <div class="mt-3">
-                    <MicroList :macro="macro" :idx="i" />
+                    <MicroList :macro="macro" :macroIdx="i" />
                 </div>
             </div>
         </div>

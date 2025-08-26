@@ -1,7 +1,22 @@
 <script setup>
+import { useCourseStore } from "../stores/course.js";
+import { useRouter, useRoute } from "vue-router";
+
+const router = useRouter();
+
 const props = defineProps({
     micro: Object,
+    macroIdx: Number,
+    microIdx: Number,
 });
+
+const courseStore = useCourseStore();
+
+function showMicro() {
+    router.push(
+        `/courses/${courseStore._id}/${props.macroIdx}/${props.microIdx}`,
+    );
+}
 </script>
 
 <template>
@@ -32,7 +47,7 @@ const props = defineProps({
     >
         <button
             class="btn bg-dark text-white w-50 h-100 rounded-0"
-            @click="showMicro(j)"
+            @click="showMicro"
         >
             <i class="bi bi-play h1"></i>
         </button>

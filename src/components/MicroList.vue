@@ -3,10 +3,8 @@ import Micro from "./Micro.vue";
 
 const props = defineProps({
     macro: Object,
-    idx: Number,
+    macroIdx: Number,
 });
-
-function showMicro(j) {}
 </script>
 
 <template>
@@ -19,7 +17,7 @@ function showMicro(j) {}
             class="d-flex flex-row align-items-stretch bg-white text-dark border rounded-5 shadow-sm p-0 w-100 gap-3 overflow-hidden"
             style="min-height: 150px"
         >
-            <Micro :micro="micro" />
+            <Micro :micro="micro" :macroIdx="macroIdx" :microIdx="j" />
         </div>
     </div>
 </template>

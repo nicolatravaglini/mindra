@@ -3,7 +3,7 @@ import Login from "../components/Login.vue";
 import CoursesMenu from "../views/CoursesMenu.vue";
 import CourseView from "../views/CourseView.vue";
 import MyMaterials from "../views/MyMaterials.vue";
-// import Micro from "../components/Micro.vue";
+import MicroView from "../views/MicroView.vue";
 import { checkAuth } from "../api/checkAuth.js";
 
 const routes = [
@@ -15,11 +15,11 @@ const routes = [
         component: CourseView,
         meta: { requiresAuth: true },
     },
-    // {
-    //     path: "/courses/:id/micro",
-    //     component: Micro,
-    //     meta: { requiresAuth: true },
-    // },
+    {
+        path: "/courses/:id/:macroIdx/:microIdx",
+        component: MicroView,
+        meta: { requiresAuth: true },
+    },
     {
         path: "/mymaterials",
         component: MyMaterials,

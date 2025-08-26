@@ -31,7 +31,7 @@ async function logoutAndLogin() {
 </script>
 
 <template>
-    <nav class="navbar navbar-expand">
+    <nav v-if="route.path !== '/login'" class="navbar navbar-expand">
         <div
             class="container-fluid justify-content-between gap-3 align-items-center"
         >

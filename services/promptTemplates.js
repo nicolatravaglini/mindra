@@ -19,6 +19,7 @@ Respond in JSON format following this schema:
       {
         "title": "Micro topic title",
         "description": "Description",
+		"content": "The content of the micro explained from the material, formatted in html",
 		"estimatedPomodoros": "Each one is 25 minutes of study, this number must be an integer >= 1"
         "quizzes": ["Question 1", "Question 2"]
       }

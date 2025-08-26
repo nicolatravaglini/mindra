@@ -4,8 +4,7 @@ import { useRouter } from "vue-router";
 import { addCourse, getCourses, getCourse } from "../api/course.js";
 import { useCourseStore } from "../stores/course.js";
 import { useSectionLoader } from "../composables/useSectionLoader.js";
-import Navbar from "./Navbar.vue";
-import Loader from "./Loader.vue";
+import Loader from "../components/Loader.vue";
 
 const router = useRouter();
 const courseStore = useCourseStore();
@@ -44,8 +43,6 @@ onMounted(async () => {
 
 <template>
     <div class="container-fluid">
-        <Navbar />
-
         <div class="container pt-5">
             <!-- Title -->
             <div class="mb-4">

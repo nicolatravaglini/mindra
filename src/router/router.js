@@ -1,15 +1,25 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "../components/Login.vue";
-import CoursesMenu from "../components/CoursesMenu.vue";
-import Course from "../components/Course.vue";
-import MyMaterials from "../components/MyMaterials.vue";
+import CoursesMenu from "../views/CoursesMenu.vue";
+import CourseView from "../views/CourseView.vue";
+import MyMaterials from "../views/MyMaterials.vue";
+// import Micro from "../components/Micro.vue";
 import { checkAuth } from "../api/checkAuth.js";
 
 const routes = [
     { path: "/", redirect: "/login" },
     { path: "/login", component: Login, meta: { login: true } },
     { path: "/courses", component: CoursesMenu, meta: { requiresAuth: true } },
-    { path: "/courses/:id", component: Course, meta: { requiresAuth: true } },
+    {
+        path: "/courses/:id",
+        component: CourseView,
+        meta: { requiresAuth: true },
+    },
+    // {
+    //     path: "/courses/:id/micro",
+    //     component: Micro,
+    //     meta: { requiresAuth: true },
+    // },
     {
         path: "/mymaterials",
         component: MyMaterials,

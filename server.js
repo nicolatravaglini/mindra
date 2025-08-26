@@ -59,8 +59,11 @@ app.use("/api/material", materialRoute);
 
 // Client
 app.use(express.static("dist"));
+app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(global.rootDir, "dist", "index.html"));
+});
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
     console.log("Server listening...");
 });
 

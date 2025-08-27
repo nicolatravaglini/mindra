@@ -1,23 +1,5 @@
 import { z } from "zod";
 
-/* 
-    course: [
-        {
-            title: String,
-            description: String,
-            micro: [
-                {
-                    title: String,
-                    description: String,
-                    content: String,
-                    estimatedPomodoros: Number,
-                    quizzes: [String],
-                },
-            ],
-        },
-    ],
- */
-
 const Course = z.object({
     course: z.array(
         z.object({

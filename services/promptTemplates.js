@@ -1,33 +1,33 @@
-export function generateCoursePrompt(content) {
+export function generateCoursePrompt() {
     return `
-Given the following university course content, generate a structured summary divided into:
-- Macro topics
-- Micro topics under each macro
-- Simple quizzes for each micro topic
+You are given the following university course material. Your task is to transform it into a well-structured study plan in JSON format.
 
-Material:
----
-${content}
----
-Respond following the indications for the fields of the JSON:
+The output must strictly follow this structure:
 {
-	course: [
-	  {
-		title: "Macro topic title",
-		description: "Description",
-		micro: [
-		  {
-			title: "Micro topic title",
-			description: "Description",
-			content: "The content of the micro explained from the material, formatted in html. It must explain everything regarding the micro topic, deep into details.",
-			estimatedPomodoros: "Each one is 25 minutes of study, this number must be an integer >= 1"
-			quizzes: ["Question 1", "Question 2"]
-		  }
-		]
-	  }
-	]
+  "course": [
+    {
+      "title": "Macro topic title",
+      "description": "A concise summary of the macro topic (2–4 sentences).",
+      "micro": [
+        {
+          "title": "Micro topic title",
+          "description": "A brief explanation (1–3 sentences) of what the student will learn in this micro topic.",
+          "content": "A detailed explanation of the micro topic extracted from the provided material, written in clear academic style. Use <p>, <ul>, <ol>, <li>, <strong>, and <em> HTML tags for formatting. Include all relevant concepts, theorems, proofs, examples, and explanations. All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML.",
+          "estimatedPomodoros": "An integer >= 1, estimating the number of 25-minute Pomodoro sessions required to study this micro topic in depth.",
+          "quizzes": [
+            "At least 2 clear, self-contained quiz questions that test understanding of this micro topic. Questions must be phrased as if for a student self-test."
+          ]
+        }
+      ]
+    }
+  ]
 }
 
-Write the formulas in LaTeX enclosed between \( ... \) for inline and \[ ... \] for block display. Do not convert them into images, and do not use any other HTML.
+Additional requirements:
+1. Macro Topics: Divide the material into major areas of study. Each macro topic should cover a coherent set of ideas.
+2. Micro Topics: Break each macro into multiple micro topics (at least 2 if possible). Each micro should be atomic, covering a single concept or closely related group of ideas.
+3. Content depth: For each micro, the "content" must be a full explanation from the material, rewritten clearly and enriched with context (not just copied). Use HTML tags for readability, and LaTeX for formulas.
+4. Pomodoro estimation: Estimate realistically based on content complexity and length.
+5. Quizzes: For each micro, provide 2–5 quiz questions. They should focus on understanding, application, and recall (not just definitions).
 `.trim();
 }

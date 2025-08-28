@@ -18,4 +18,9 @@ const Course = z.object({
     ),
 });
 
-export { Course };
+const Check = z.object({
+    valutation: z.number(),
+    comment: z.string(),
+});
+
+export { Course, Check };

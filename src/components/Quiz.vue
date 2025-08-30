@@ -36,6 +36,8 @@ const findQuiz = computed(() => {
 
 async function sendAnswer() {
     valutationLoader.load(async () => {
+        console.log(macroIdx.value);
+        console.log(microIdx.value);
         const valutation = await checkAnswer(
             micro.value.content,
             props.quiz,
@@ -80,7 +82,7 @@ onMounted(() => {});
                 <div v-if="findQuiz.length > 0" class="border-top">
                     <div class="pt-2">
                         <span class="fw-bold">Answer: </span>
-                        <pre>{{ findQuiz[0].answer }}</pre>
+                        <pre class="text-wrap">{{ findQuiz[0].answer }}</pre>
                     </div>
                     <div class="fs-4 fw-bold">
                         {{ findQuiz[0].valutation }} / 10

@@ -37,10 +37,14 @@ onMounted(() => {});
             class="d-flex flex-column justify-content-start align-items-center gap-3 mt-3"
         >
             <div class="border rounded-3 p-4 w-100">
-                <div class="fs-3 pb-2 border-bottom">
+                <div class="fs-3 pb-2 border-bottom fw-bold">
                     {{ micro.title }}
                 </div>
-                <Content class="mt-3" :content="micro.content" />
+                <Content
+                    class="mt-3"
+                    style="font-size: 20px"
+                    :content="micro.content"
+                />
             </div>
             <div class="border rounded-3 p-4 w-100">
                 <div class="fs-4">Quiz</div>

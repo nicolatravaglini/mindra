@@ -20,7 +20,22 @@ const estimatedTotalPomodoros = computed(() =>
         0,
     ),
 );
-const progPerc = computed(() => 0);
+const totalQuizzes = computed(() =>
+    courseStore.course.reduce(
+        (sumMacro, macro) =>
+            (sumMacro += macro.micro.reduce(
+                (sumMicro, micro) => (sumMicro += micro.quizzes.length),
+                0,
+            )),
+        0,
+    ),
+);
+const totalCompletedQuizzes = computed(
+    () => courseStore.progress.filter((p) => p.valutation >= 6).length,
+);
+const progPerc = computed(
+    () => (totalCompletedQuizzes.value * 100) / totalQuizzes.value,
+);
 
 async function deleteCourse() {
     await deleteInnerCourseById(courseStore._id);

@@ -32,48 +32,88 @@ router.post("/save", isAuthenticated, async (req, res) => {
             comment,
         } = body;
 
-        await Course.updateOne(
-            {
-                _id: courseId,
-                "progress.macroIndex": macroIndex,
-                "progress.microIndex": microIndex,
-                "progress.quizIndex": quizIndex,
-            },
+        // Provo ad aggiornare se esiste
+        const updated = await Course.updateOne(
+            { _id: courseId },
             {
                 $set: {
-                    "progress.$.answer": answer,
-                    "progress.$.valutation": valutation,
-                    "progress.$.comment": comment,
+                    "progress.$[elem].answer": answer,
+                    "progress.$[elem].valutation": valutation,
+                    "progress.$[elem].comment": comment,
                 },
+            },
+            {
+                arrayFilters: [
+                    {
+                        "elem.macroIndex": macroIndex,
+                        "elem.microIndex": microIndex,
+                        "elem.quizIndex": quizIndex,
+                    },
+                ],
             },
         );
 
-        await Course.updateOne(
-            {
-                _id: courseId,
-                progress: {
-                    $not: {
-                        $elemMatch: {
+        // Se non è stato aggiornato nulla, allora faccio il push
+        if (updated.modifiedCount === 0) {
+            await Course.updateOne(
+                { _id: courseId },
+                {
+                    $push: {
+                        progress: {
                             macroIndex,
                             microIndex,
                             quizIndex,
+                            answer,
+                            valutation,
+                            comment,
                         },
                     },
                 },
-            },
-            {
-                $push: {
-                    progress: {
-                        macroIndex,
-                        microIndex,
-                        quizIndex,
-                        answer,
-                        valutation,
-                        comment,
-                    },
-                },
-            },
-        );
+            );
+        }
+
+        // await Course.updateOne(
+        //     {
+        //         _id: courseId,
+        //         "progress.$.macroIndex": macroIndex,
+        //         "progress.$.microIndex": microIndex,
+        //         "progress.$.quizIndex": quizIndex,
+        //     },
+        //     {
+        //         $set: {
+        //             "progress.$.answer": answer,
+        //             "progress.$.valutation": valutation,
+        //             "progress.$.comment": comment,
+        //         },
+        //     },
+        // );
+        //
+        // await Course.updateOne(
+        //     {
+        //         _id: courseId,
+        //         progress: {
+        //             $not: {
+        //                 $elemMatch: {
+        //                     macroIndex,
+        //                     microIndex,
+        //                     quizIndex,
+        //                 },
+        //             },
+        //         },
+        //     },
+        //     {
+        //         $push: {
+        //             progress: {
+        //                 macroIndex,
+        //                 microIndex,
+        //                 quizIndex,
+        //                 answer,
+        //                 valutation,
+        //                 comment,
+        //             },
+        //         },
+        //     },
+        // );
         res.status(200).send();
     } catch (err) {
         console.error("Error while updating:", err);

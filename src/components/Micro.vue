@@ -93,7 +93,7 @@ function showMicro() {
         class="flex-shrink-0 w-25 d-flex justify-content-end align-items-center"
     >
         <button
-            :disabled="isDisabled"
+            :disabled="false"
             class="btn bg-dark text-white w-50 h-100 rounded-0"
             @click="showMicro"
         >

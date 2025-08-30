@@ -9,7 +9,7 @@ export const useCourseStore = defineStore(
         const userId = ref("");
         const materialIds = ref([]);
         const course = ref([]);
-        const progress = ref({});
+        const progress = ref([]);
 
         function $reset() {
             _id.value = "";
@@ -17,7 +17,7 @@ export const useCourseStore = defineStore(
             userId.value = "";
             materialIds.value = [];
             course.value = [];
-            progress.value = {};
+            progress.value = [];
         }
 
         function set(data) {

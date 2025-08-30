@@ -78,9 +78,9 @@ onMounted(() => {});
         <div class="mt-3">
             <Loader :isLoading="valutationLoader.isLoading.value">
                 <div v-if="findQuiz.length > 0" class="border-top">
-                    <div class="py-2">
+                    <div class="pt-2">
                         <span class="fw-bold">Answer: </span>
-                        {{ findQuiz[0].answer }}
+                        <pre>{{ findQuiz[0].answer }}</pre>
                     </div>
                     <div class="fs-4 fw-bold">
                         {{ findQuiz[0].valutation }} / 10

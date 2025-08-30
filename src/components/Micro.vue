@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from "vue";
 import { useCourseStore } from "../stores/course.js";
 import { useRouter, useRoute } from "vue-router";
 
@@ -11,6 +12,17 @@ const props = defineProps({
 });
 
 const courseStore = useCourseStore();
+
+const totalQuizzes = computed(() => props.micro.quizzes.length);
+const totalCompletedQuizzes = computed(
+    () =>
+        courseStore.progress.filter(
+            (p) =>
+                p.macroIndex == props.macroIdx &&
+                p.microIndex == props.microIdx &&
+                p.valutation >= 6,
+        ).length,
+);
 
 function showMicro() {
     router.push(
@@ -35,9 +47,17 @@ function showMicro() {
             <span class="fw-bold">Description: </span>
             {{ micro.description }}
         </div>
-        <div class="fst-italic">
-            {{ micro.estimatedPomodoros }}
-            <span><i class="bi bi-stopwatch"></i></span>
+        <div
+            class="d-flex flex-row justify-content-start align-items-center gap-5"
+        >
+            <div class="fst-italic">
+                {{ micro.estimatedPomodoros }}
+                <span><i class="bi bi-stopwatch"></i></span>
+            </div>
+            <div class="fst-italic">
+                {{ totalCompletedQuizzes }}/{{ totalQuizzes }}
+                <span><i class="bi bi-patch-question"></i></span>
+            </div>
         </div>
     </div>
 

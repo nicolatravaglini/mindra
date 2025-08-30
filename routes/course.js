@@ -100,7 +100,7 @@ router.get("/:id/generate", isAuthenticated, async (req, res) => {
             {
                 $set: {
                     course: genJson,
-                    progress: { macroIndex: 0, microIndex: 0 },
+                    progress: [],
                 },
             },
         );

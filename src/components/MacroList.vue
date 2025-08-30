@@ -7,19 +7,10 @@ const courseStore = useCourseStore();
 
 const visibleMacro = ref({});
 
-function progTest(i, j) {
-    courseStore.progress.macroIndex = i;
-    courseStore.progress.microIndex = courseStore.course
-        .slice(0, i)
-        .reduce((acc, current) => acc + current.micro.length, 0);
-}
-
 function showMacro(i) {
-    progTest(i, 0);
     visibleMacro.value[i] = visibleMacro.value[i]
         ? !visibleMacro.value[i]
         : true;
-    console.log(visibleMacro.value[i]);
 }
 </script>
 

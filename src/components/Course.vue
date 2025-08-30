@@ -20,16 +20,7 @@ const estimatedTotalPomodoros = computed(() =>
         0,
     ),
 );
-const progPerc = computed(
-    () =>
-        ((courseStore.progress.macroIndex + courseStore.progress.microIndex) *
-            100) /
-        (courseStore.course.length +
-            courseStore.course.reduce(
-                (acc, current) => acc + current.micro.length,
-                0,
-            )),
-);
+const progPerc = computed(() => 0);
 
 async function deleteCourse() {
     await deleteInnerCourseById(courseStore._id);

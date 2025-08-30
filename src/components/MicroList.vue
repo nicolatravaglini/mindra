@@ -19,6 +19,7 @@ const props = defineProps({
         >
             <Micro :micro="micro" :macroIdx="macroIdx" :microIdx="j" />
         </div>
+        <br />
     </div>
 </template>
 

@@ -19,6 +19,7 @@ const valutationLoader = useSectionLoader(`valutation-${props.idx}`);
 console.log(valutationLoader.isLoading.value);
 
 const answer = ref("");
+const textareaRef = ref();
 
 const macroIdx = computed(() => route.params.macroIdx);
 const microIdx = computed(() => route.params.microIdx);
@@ -57,7 +58,17 @@ async function sendAnswer() {
         console.log(courseStore.progress);
     });
 }
-onMounted(() => {});
+
+function autoResizeTextarea() {
+    const el = textareaRef.value;
+    if (!el) return;
+    el.style.height = "auto"; // reset
+    el.style.height = el.scrollHeight + "px"; // espandi
+}
+
+onMounted(() => {
+    autoResizeTextarea();
+});
 </script>
 
 <template>
@@ -69,10 +80,13 @@ onMounted(() => {});
         </p>
         <Content :content="quiz" class="fs-5" />
         <textarea
+            ref="textareaRef"
             class="form-control mb-2"
             rows="3"
             placeholder="Write you answer..."
             v-model="answer"
+            style="font-size: 18px"
+            @input="autoResizeTextarea"
         ></textarea>
         <button :disabled="!answer" class="btn btn-dark" @click="sendAnswer">
             Check answer

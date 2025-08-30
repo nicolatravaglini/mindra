@@ -25,9 +25,10 @@ const userStore = useUserStore();
 const courseStore = useCourseStore();
 const materialsStore = useMaterialsStore();
 
-// TODO: at least pdfs (with parsing)!
 const supportedExtensions = ["txt", "md", "pdf"];
 const fileInput = ref(null);
+
+const extensionOf = (fileName) => fileName.toLowerCase().split(".").pop();
 
 // States
 const { isLoading: isLoadingFiles, load: loadFiles } =
@@ -77,39 +78,41 @@ async function refreshCourse() {
 }
 
 async function refreshMaterials() {
-    loadFiles(async () => {
-        const fresh = await getMaterialsFromCourseById(courseStore._id);
-        materialsStore.materials = fresh;
-    });
+    const fresh = await getMaterialsFromCourseById(courseStore._id);
+    materialsStore.materials = fresh;
 }
 
 async function uploadFiles(fileList) {
-    let materials = [];
+    loadFiles(async () => {
+        let materials = [];
 
-    for (const file of fileList) {
-        const extension = file.name.toLowerCase().split(".").pop();
-        let content;
-        if (extension === "pdf") {
-            content = await readFileAsPDF(file);
-        } else {
-            content = await readFileAsText(file);
+        for (const file of fileList) {
+            const extension = extensionOf(file.name);
+            let content;
+            if (extension === "pdf") {
+                content = await readFileAsPDF(file);
+            } else {
+                content = await readFileAsText(file);
+            }
+            materials.push({
+                fileName: file.name,
+                content: content,
+            });
         }
-        materials.push({
-            fileName: file.name,
-            content: content,
-        });
-    }
 
-    await addMaterialsToCourse(courseStore._id, materials);
-    await refreshCourse();
-    await refreshMaterials();
+        await addMaterialsToCourse(courseStore._id, materials);
+        await refreshCourse();
+        await refreshMaterials();
+    });
 }
 
 async function deleteFile(index) {
-    const id = materialsStore.materials[index]._id;
-    await deleteMaterialFromCourseById(id, courseStore._id);
-    await refreshCourse();
-    await refreshMaterials();
+    loadFiles(async () => {
+        const id = materialsStore.materials[index]._id;
+        await deleteMaterialFromCourseById(id, courseStore._id);
+        await refreshCourse();
+        await refreshMaterials();
+    });
 }
 
 // Insertion files handling
@@ -125,7 +128,7 @@ function handleFileSelect(event) {
     let validFiles = [];
 
     Array.from(event.target.files).forEach((file) => {
-        const extension = file.name.toLowerCase().split(".").pop();
+        const extension = extensionOf(file.name);
         if (!supportedExtensions.includes(extension)) {
             console.log("File", file.name, "not supported yet!");
         } else {

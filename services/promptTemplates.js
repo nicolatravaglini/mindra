@@ -44,7 +44,7 @@ You will be given:
 Compare the student’s answer with the material and the question, then provide your evaluation following strictly this JSON schema:
 {
   "valutation": "A score out of 10 of the answer, should be an integer",
-  "comment": "A brief comment on the answer, what could have been said better, what misses, what's good, etc..."
+  "comment": "A brief comment on the answer, what could have been said better, what misses, what's good, etc... . All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML."
 }
 Be concise in the comment and avoid repeating the material word-for-word.
 `.trim();

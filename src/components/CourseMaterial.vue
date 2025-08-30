@@ -13,6 +13,10 @@ import { getCourse, generateCourse } from "../api/course.js";
 import { useSectionLoader } from "../composables/useSectionLoader.js";
 import FileList from "./FileList.vue";
 import Loader from "./Loader.vue";
+import * as pdfjsLib from "pdfjs-dist";
+import pdfWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const router = useRouter();
 
@@ -22,7 +26,7 @@ const courseStore = useCourseStore();
 const materialsStore = useMaterialsStore();
 
 // TODO: at least pdfs (with parsing)!
-const supportedExtensions = ["txt", "md"];
+const supportedExtensions = ["txt", "md", "pdf"];
 const fileInput = ref(null);
 
 // States
@@ -43,6 +47,30 @@ function readFileAsText(file) {
     });
 }
 
+async function readFileAsPDF(file) {
+    // Leggi il file come ArrayBuffer
+    const arrayBuffer = await file.arrayBuffer();
+    console.log(arrayBuffer);
+
+    // Carica il PDF
+    const pdf = await pdfjsLib.getDocument({
+        data: arrayBuffer,
+    }).promise;
+
+    let fullText = "";
+
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items.map((item) => item.str).join(" ");
+        fullText += pageText + "\n\n";
+    }
+
+    console.log(fullText);
+
+    return fullText;
+}
+
 async function refreshCourse() {
     const fresh = await getCourse(courseStore._id);
     courseStore.set(fresh);
@@ -59,7 +87,13 @@ async function uploadFiles(fileList) {
     let materials = [];
 
     for (const file of fileList) {
-        const content = await readFileAsText(file);
+        const extension = file.name.toLowerCase().split(".").pop();
+        let content;
+        if (extension === "pdf") {
+            content = await readFileAsPDF(file);
+        } else {
+            content = await readFileAsText(file);
+        }
         materials.push({
             fileName: file.name,
             content: content,

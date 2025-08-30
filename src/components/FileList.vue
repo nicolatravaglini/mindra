@@ -11,6 +11,8 @@ function getFileIconClass(fileName) {
             return "bi bi-file-earmark-text";
         case "md":
             return "bi bi-markdown";
+        case "pdf":
+            return "bi bi-file-earmark-pdf";
         default:
             return "bi bi-file-earmark";
     }

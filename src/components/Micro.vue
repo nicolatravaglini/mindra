@@ -13,16 +13,41 @@ const props = defineProps({
 
 const courseStore = useCourseStore();
 
-const totalQuizzes = computed(() => props.micro.quizzes.length);
-const totalCompletedQuizzes = computed(
-    () =>
+const totalQuizzes = computed(() => {
+    return (micro) => micro.quizzes.length;
+});
+const totalCompletedQuizzes = computed(() => {
+    return (macroIdx, microIdx) =>
         courseStore.progress.filter(
             (p) =>
-                p.macroIndex == props.macroIdx &&
-                p.microIndex == props.microIdx &&
+                p.macroIndex == macroIdx &&
+                p.microIndex == microIdx &&
                 p.valutation >= 6,
-        ).length,
-);
+        ).length;
+});
+const isDisabled = computed(() => {
+    if (props.microIdx == 0) {
+        return (
+            props.macroIdx > 0 &&
+            totalCompletedQuizzes.value(
+                props.macroIdx - 1,
+                courseStore.course[props.macroIdx - 1].micro.length - 1,
+            ) <
+                totalQuizzes.value(
+                    courseStore.course[props.macroIdx - 1].micro[
+                        courseStore.course[props.macroIdx - 1].micro.length - 1
+                    ],
+                )
+        );
+    } else {
+        return (
+            totalCompletedQuizzes.value(props.macroIdx, props.microIdx - 1) <
+            totalQuizzes.value(
+                courseStore.course[props.macroIdx].micro[props.microIdx - 1],
+            )
+        );
+    }
+});
 
 function showMicro() {
     router.push(
@@ -55,7 +80,9 @@ function showMicro() {
                 <span><i class="bi bi-stopwatch"></i></span>
             </div>
             <div class="fst-italic">
-                {{ totalCompletedQuizzes }}/{{ totalQuizzes }}
+                {{ totalCompletedQuizzes(macroIdx, microIdx) }}/{{
+                    totalQuizzes(micro)
+                }}
                 <span><i class="bi bi-patch-question"></i></span>
             </div>
         </div>
@@ -66,6 +93,7 @@ function showMicro() {
         class="flex-shrink-0 w-25 d-flex justify-content-end align-items-center"
     >
         <button
+            :disabled="isDisabled"
             class="btn bg-dark text-white w-50 h-100 rounded-0"
             @click="showMicro"
         >

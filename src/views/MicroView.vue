@@ -47,7 +47,7 @@ onMounted(() => {});
                 <div class="mt-3">
                     <QuizList :quizzes="micro.quizzes" />
                 </div>
-                <div class="fs-3 mt-3">
+                <div v-if="avgGrades" class="fs-3 mt-3">
                     Average grades: {{ avgGrades.toFixed(2) }}
                 </div>
             </div>

@@ -20,6 +20,12 @@ const estimatedTotalPomodoros = computed(() =>
         0,
     ),
 );
+const estimatedTotalTime = computed(() => {
+    const hours = parseInt(estimatedTotalPomodoros.value / 2);
+    const minutes = (estimatedTotalPomodoros.value % 2) * 30;
+    console.log(hours);
+    return `${hours}h${minutes !== 0 ? " " + minutes + "m" : ""}`;
+});
 const totalQuizzes = computed(() =>
     courseStore.course.reduce(
         (sumMacro, macro) =>
@@ -55,6 +61,7 @@ async function deleteCourse() {
                     Estimated total pomodoros:
                     <span class="fw-bold">{{ estimatedTotalPomodoros }}</span>
                     <i class="bi bi-stopwatch"></i>
+                    <span class="ms-2">({{ estimatedTotalTime }})</span>
                     <br />
                     Completion percentage:
                     <span class="fw-bold">{{ progPerc.toFixed(1) }}%</span>

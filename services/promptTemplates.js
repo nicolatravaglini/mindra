@@ -12,7 +12,7 @@ The output must strictly follow this structure:
         {
           "title": "Micro topic title",
           "description": "A brief explanation (1–3 sentences) of what the student will learn in this micro topic.",
-          "content": "A detailed explanation of the micro topic extracted from the provided material, written in clear academic style. Use <p>, <ul>, <ol>, <li>, <strong>, and <em> HTML tags for formatting. Include all relevant concepts, theorems, proofs, examples, and explanations. All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML.",
+          "content": "See detailed requirements below.",
           "estimatedPomodoros": "An integer >= 1, estimating the number of 30-minute Pomodoro sessions required to study this micro topic in depth.",
           "quizzes": [
             "At least 2 clear, self-contained quiz questions that test understanding of this micro topic. Questions must be phrased as if for a student self-test. All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML."
@@ -23,12 +23,28 @@ The output must strictly follow this structure:
   ]
 }
 
+Critical requirements for the "content" field:
+1. The "content" must be a detailed, structured explanation of the micro topic, rewritten from the provided material. Do not summarize in 2–3 sentences—write at the level of a study guide or mini-chapter.
+2. Always include:
+	- Clear definitions and explanations of all relevant concepts.
+	- Step-by-step reasoning for theorems, proofs, or algorithms.
+	- Worked-out examples (with explanations of each step).
+	- Connections to related ideas where helpful.
+3. Use formatting for readability:
+	- Paragraphs: <p> ... </p>
+	- Lists: <ul>, <ol>, <li>
+	- Emphasis: <strong>, <em>
+4. All mathematical content must use LaTeX, formatted as:
+	- Inline math: \\( ... \\)
+	- Block math: \\[ ... \\]
+	- Do not output images or MathML.
+5. Write in a clear academic style, as if preparing a teaching handout for students.
+
 Additional requirements:
 1. Macro Topics: Divide the material into major areas of study. Each macro topic should cover a coherent set of ideas.
 2. Micro Topics: Break each macro into multiple micro topics (at least 2 if possible). Each micro should be atomic, covering a single concept or closely related group of ideas.
-3. Content depth: For each micro, the "content" must be a full explanation from the material, rewritten clearly and enriched with context (not just copied). Use HTML tags for readability, and LaTeX for formulas.
-4. Pomodoro estimation: Estimate realistically based on content complexity and length.
-5. Quizzes: For each micro, provide 2–5 quiz questions. They should focus on understanding, application, and recall (not just definitions). Use HTML tags for readability, and LaTeX for formulas.
+3. Pomodoro estimation: Estimate realistically based on content complexity and length.
+4. Quizzes: For each micro, provide 2–5 quiz questions. They should focus on understanding, application, and recall (not just definitions). Do NOT provide the answers, just the question. Use HTML tags for readability, and LaTeX for formulas.
 `.trim();
 }
 
@@ -46,7 +62,8 @@ Compare the student’s answer with the material and the question, then provide 
   "valutation": "A score out of 10 of the answer, should be an integer",
   "comment": "A brief comment on the answer, what could have been said better, what misses, what's good, etc... . All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML."
 }
-Be concise in the comment and avoid repeating the material word-for-word.
+Be concise in the comment and avoid repeating the material word-for-word, but at the same time be kind: if the student's answer is wrong, your goal is to help
+they understand their mistakes.
 `.trim();
 }
 

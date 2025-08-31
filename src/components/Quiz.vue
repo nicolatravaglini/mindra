@@ -62,8 +62,8 @@ async function sendAnswer() {
 function autoResizeTextarea() {
     const el = textareaRef.value;
     if (!el) return;
-    el.style.height = "auto"; // reset
-    el.style.height = el.scrollHeight + "px"; // espandi
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
 }
 
 onMounted(() => {

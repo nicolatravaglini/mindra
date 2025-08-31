@@ -1,4 +1,6 @@
 import express from "express";
+import fs from "fs";
+import https from "https";
 import cors from "cors";
 import Datastore from "nedb";
 import authRoute from "./routes/auth.js";
@@ -41,8 +43,8 @@ app.use(
         cookie: {
             maxAge: 3600000,
             httpOnly: true,
-            secure: false,
-            sameSite: "Lax",
+            secure: true,
+            sameSite: "None",
         },
     }),
 );
@@ -65,8 +67,16 @@ app.get(/^\/(?!api).*/, (req, res) => {
     res.sendFile(path.join(global.rootDir, "dist", "index.html"));
 });
 
-app.listen(port, "0.0.0.0", () => {
-    console.log("Server listening...");
+const options = {
+    key: fs.readFileSync("./certs/key.pem"),
+    cert: fs.readFileSync("./certs/cert.pem"),
+};
+
+// app.listen(port, "0.0.0.0", () => {
+//     console.log("Server listening...");
+// });
+https.createServer(options, app).listen(port, "0.0.0.0", () => {
+    console.log(`Server HTTPS listening on port ${port}`);
 });
 
 process.on("SIGINT", async () => {

@@ -78,7 +78,7 @@ onMounted(() => {
         <p class="card-title border-bottom pb-1 w-100">
             Question {{ idx + 1 }}
         </p>
-        <Content :content="quiz" class="fs-5" />
+        <pre class="text-wrap"><Content :content="quiz" class="fs-5" /></pre>
         <textarea
             ref="textareaRef"
             class="form-control mb-2"
@@ -110,4 +110,8 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+pre {
+    font-family: inherit;
+}
+</style>

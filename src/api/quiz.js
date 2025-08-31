@@ -43,3 +43,29 @@ export async function saveAnswer(
     });
     return await response;
 }
+
+export async function addQuiz(
+    courseId,
+    macroIndex,
+    microIndex,
+    title,
+    content,
+    quizzes,
+) {
+    const response = await fetch(`${API_URL}/api/quiz/add`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            courseId: courseId,
+            macroIndex: macroIndex,
+            microIndex: microIndex,
+            title: title,
+            content: content,
+            quizzes: quizzes,
+        }),
+    });
+    return await response;
+}

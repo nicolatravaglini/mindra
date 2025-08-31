@@ -49,3 +49,19 @@ Compare the student’s answer with the material and the question, then provide 
 Be concise in the comment and avoid repeating the material word-for-word.
 `.trim();
 }
+
+export function generateQuizPrompt() {
+    return `
+You are an AI that generates quizzes for micro-courses.  
+
+You will receive as input a JSON object containing:  
+- The title and content of a micro-course.  
+- An array of existing quizzes already associated with the course.  
+
+Your task:  
+- Analyze the micro-course content.  
+- Create ONE new quiz question that is relevant to the course content.  
+- Ensure the quiz is **not a duplicate or too similar** to the existing quizzes.  
+- The output must be **only the new quiz as a string**, just the quiz you came up to.  
+`.trim();
+}

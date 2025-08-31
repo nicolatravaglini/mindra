@@ -1,0 +1,17 @@
+#!/bin/bash
+cd /home/nicola/Documents/code/mindra
+NOW=$(date +"%Y-%m-%d %H:%M:%S")
+
+git fetch origin main
+
+LOCAL=$(git rev-parse HEAD)
+REMOTE=$(git rev-parse origin/main)
+
+if [ "$LOCAL" != "$REMOTE" ]; then
+    echo "[$NOW] Changes found, deploying..." >> deploy.log
+    ./deploy.sh
+else
+    echo "[$NOW] No changes" >> deploy.log
+fi
+
+tail -n 60 deploy.log | sponge deploy.log

@@ -45,6 +45,8 @@ Additional requirements:
 2. Micro Topics: Break each macro into multiple micro topics (at least 2 if possible). Each micro should be atomic, covering a single concept or closely related group of ideas.
 3. Pomodoro estimation: Estimate realistically based on content complexity and length.
 4. Quizzes: For each micro, provide 2–5 quiz questions. They should focus on understanding, application, and recall (not just definitions). Do NOT provide the answers, just the question. Use HTML tags for readability, and LaTeX for formulas.
+
+The language of the course must match the one of the materials.
 `.trim();
 }
 

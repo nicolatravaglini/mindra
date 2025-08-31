@@ -96,7 +96,9 @@ onMounted(() => {
                 <div v-if="findQuiz.length > 0" class="border-top">
                     <div class="pt-2">
                         <span class="fw-bold">Answer: </span>
-                        <pre class="text-wrap">{{ findQuiz[0].answer }}</pre>
+                        <pre class="text-wrap" style="font-size: 17px">{{
+                            findQuiz[0].answer
+                        }}</pre>
                     </div>
                     <div class="fs-4 fw-bold">
                         {{ findQuiz[0].valutation }} / 10

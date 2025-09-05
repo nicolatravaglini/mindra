@@ -1,4 +1,5 @@
 #!/bin/bash
+export NVM_DIR="$HOME/.config/nvm"
 source "$NVM_DIR/nvm.sh"
 
 cd /home/nicola/Documents/code/mindra

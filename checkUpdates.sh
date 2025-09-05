@@ -9,7 +9,7 @@ REMOTE=$(git rev-parse origin/main)
 
 if [ "$LOCAL" != "$REMOTE" ]; then
     echo "[$NOW] Changes found, deploying..." >> restart.log
-    ./restart.sh
+    ./restart.sh >> restart.log
 else
     echo "[$NOW] No changes" >> restart.log
 fi

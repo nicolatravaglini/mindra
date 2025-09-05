@@ -14,4 +14,4 @@ else
     echo "[$NOW] No changes" >> restart.log
 fi
 
-tail -n 60 restart.log | sponge restart.log
+tail -n 1000 restart.log | sponge restart.log

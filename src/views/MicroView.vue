@@ -4,6 +4,7 @@ import { useRouter, useRoute } from "vue-router";
 import { useCourseStore } from "../stores/course.js";
 import Content from "../components/Content.vue";
 import QuizList from "../components/QuizList.vue";
+import Question from "../components/Question.vue";
 import { avg } from "../utils.js";
 import { getCourse } from "../api/course.js";
 
@@ -53,6 +54,18 @@ onMounted(async () => {
                     style="font-size: 20px"
                     :content="micro.content"
                 />
+            </div>
+            <div
+                class="border rounded-3 p-3 w-100 d-flex flex-column justify-content-start align-items-start gap-3"
+            >
+                <div>
+                    <div class="fs-5">Ask to explain something</div>
+                    <!-- <div class="fw-lighter mt-1" style="font-size: 16px">
+                        This will rewrite part of the content of the micro
+                        course
+                    </div> -->
+                </div>
+                <Question />
             </div>
             <div class="accordion mt-3 w-100" id="accordionQuiz">
                 <div class="accordion-item w-100">

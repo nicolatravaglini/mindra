@@ -47,12 +47,13 @@ async function add() {
 
         <Loader :isLoading="isLoadingQuizzes"></Loader>
 
-        <div
+        <button
             class="btn btn-outline-dark rounded-pill align-self-center my-2"
             @click="add"
+            :disabled="isLoadingQuizzes"
         >
             + Add quiz
-        </div>
+        </button>
     </div>
 </template>
 

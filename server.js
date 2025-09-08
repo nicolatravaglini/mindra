@@ -8,6 +8,7 @@ import userRoute from "./routes/user.js";
 import courseRoute from "./routes/course.js";
 import materialRoute from "./routes/material.js";
 import quizRoute from "./routes/quiz.js";
+import questionRoute from "./routes/question.js";
 import isAuthenticated from "./routes/isAuth.js";
 import session from "express-session";
 import dotenv from "dotenv";
@@ -60,6 +61,7 @@ app.use("/api/user", userRoute);
 app.use("/api/course", courseRoute);
 app.use("/api/material", materialRoute);
 app.use("/api/quiz", quizRoute);
+app.use("/api/question", questionRoute);
 
 // Client
 app.use(express.static("dist"));

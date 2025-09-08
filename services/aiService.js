@@ -5,6 +5,7 @@ import {
     generateCoursePrompt,
     checkAnswerPrompt,
     generateQuizPrompt,
+    answerQuestionPrompt,
 } from "./promptTemplates.js";
 import dotenv from "dotenv";
 
@@ -70,6 +71,23 @@ export async function generateQuiz(title, content, quizzes) {
                     quizzes: quizzes,
                 }),
             },
+        ],
+    });
+
+    return response.output_text;
+}
+
+export async function answerQuestion(json) {
+    const prompt = answerQuestionPrompt();
+
+    const response = await openai.responses.create({
+        model: process.env.OPENAI_MODEL,
+        input: [
+            {
+                role: "system",
+                content: prompt,
+            },
+            { role: "user", content: JSON.stringify(json) },
         ],
     });
 

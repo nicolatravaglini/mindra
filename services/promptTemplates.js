@@ -65,7 +65,7 @@ Compare the student’s answer with the material and the question, then provide 
   "comment": "A brief comment on the answer, what could have been said better, what misses, what's good, etc... . All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML."
 }
 Be concise in the comment and avoid repeating the material word-for-word, but at the same time be kind: if the student's answer is wrong, your goal is to help
-they understand their mistakes.
+them understand their mistakes.
 `.trim();
 }
 
@@ -82,5 +82,21 @@ Your task:
 - Create ONE new quiz question that is relevant to the course content.  
 - Ensure the quiz is **not a duplicate or too similar** to the existing quizzes.  
 - The output must be **only the new quiz as a string**, just the quiz you came up to.  
+`.trim();
+}
+
+export function answerQuestionPrompt() {
+    return `
+You are an AI that replies to answers based on the content of a micro-course.
+
+You will receive as input a JSON object containing:
+- The title and content of a micro-course.
+- A question raised by a student.
+
+Your task:
+- Analyze the micro-course content.
+- Reply to the question properly.
+
+All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML.
 `.trim();
 }

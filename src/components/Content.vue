@@ -26,7 +26,7 @@ onUpdated(renderMath);
 
 <template>
     <!-- Render the AI response -->
-    <div ref="el" v-html="content"></div>
+    <div ref="el" v-html="content" class="text-wrap w-100"></div>
 </template>
 
 <style scoped></style>

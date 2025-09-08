@@ -88,15 +88,19 @@ onMounted(() => {
             style="font-size: 18px"
             @input="autoResizeTextarea"
         ></textarea>
-        <button :disabled="!answer" class="btn btn-dark" @click="sendAnswer">
+        <button
+            :disabled="!answer || valutationLoader.isLoading.value"
+            class="btn btn-dark"
+            @click="sendAnswer"
+        >
             Check answer
         </button>
-        <div class="mt-3">
+        <div class="mt-3 w-100">
             <Loader :isLoading="valutationLoader.isLoading.value">
                 <div v-if="findQuiz.length > 0" class="border-top">
                     <div class="pt-2">
                         <span class="fw-bold">Answer: </span>
-                        <pre class="text-wrap" style="font-size: 17px">{{
+                        <pre class="text-wrap" style="font-size: 18px">{{
                             findQuiz[0].answer
                         }}</pre>
                     </div>
@@ -104,7 +108,10 @@ onMounted(() => {
                         {{ findQuiz[0].valutation }} / 10
                     </div>
                     <div class="fw-lighter">
-                        <Content :content="findQuiz[0].comment" />
+                        <Content
+                            :content="findQuiz[0].comment"
+                            style="font-size: 18px"
+                        />
                     </div>
                 </div>
             </Loader>

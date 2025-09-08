@@ -5,6 +5,7 @@ import { useCourseStore } from "../stores/course.js";
 import Content from "../components/Content.vue";
 import QuizList from "../components/QuizList.vue";
 import { avg } from "../utils.js";
+import { getCourse } from "../api/course.js";
 
 const router = useRouter();
 const route = useRoute();
@@ -28,7 +29,14 @@ const avgGrades = computed(() =>
     ),
 );
 
-onMounted(() => {});
+async function refreshCourse() {
+    const fresh = await getCourse(courseStore._id);
+    courseStore.set(fresh);
+}
+
+onMounted(async () => {
+    await refreshCourse();
+});
 </script>
 
 <template>
@@ -65,11 +73,11 @@ onMounted(() => {});
                         data-bs-parent="#accordionQuiz"
                     >
                         <div class="accordion-body">
-                            <div class="mt-3">
-                                <QuizList :quizzes="micro.quizzes" />
-                            </div>
                             <div v-if="avgGrades" class="fs-3 mt-3">
                                 Average grades: {{ avgGrades.toFixed(2) }}
+                            </div>
+                            <div class="mt-3">
+                                <QuizList :quizzes="micro.quizzes" />
                             </div>
                         </div>
                     </div>

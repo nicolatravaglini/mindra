@@ -1,7 +1,8 @@
 <script setup>
-import { computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useCourseStore } from "../stores/course.js";
 import { useRouter, useRoute } from "vue-router";
+import { Modal } from "bootstrap";
 
 const router = useRouter();
 
@@ -25,7 +26,7 @@ const totalCompletedQuizzes = computed(() => {
                 p.valutation >= 6,
         ).length;
 });
-const isDisabled = computed(() => {
+const isAhead = computed(() => {
     if (props.microIdx == 0) {
         return (
             props.macroIdx > 0 &&
@@ -49,11 +50,31 @@ const isDisabled = computed(() => {
     }
 });
 
-function showMicro() {
+let modalInstance = null;
+const confirmModal = ref(null);
+
+function pushMicro() {
     router.push(
         `/courses/${courseStore._id}/${props.macroIdx}/${props.microIdx}`,
     );
 }
+
+function showMicro() {
+    if (isAhead.value) {
+        modalInstance.show();
+    } else {
+        pushMicro();
+    }
+}
+
+function confirmShowMicro() {
+    modalInstance.hide();
+    pushMicro();
+}
+
+onMounted(() => {
+    modalInstance = new Modal(confirmModal.value);
+});
 </script>
 
 <template>
@@ -93,12 +114,53 @@ function showMicro() {
         class="flex-shrink-0 w-25 d-flex justify-content-end align-items-center"
     >
         <button
-            :disabled="isDisabled"
-            class="btn bg-dark text-white w-50 h-100 rounded-0"
+            type="button"
+            :class="[
+                'btn',
+                isAhead ? 'bg-secondary' : 'bg-dark',
+                'text-white',
+                'w-50',
+                'h-100',
+                'rounded-0',
+            ]"
             @click="showMicro"
         >
             <i class="bi bi-play h1"></i>
         </button>
+    </div>
+
+    <div class="modal fade" ref="confirmModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Warning</h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    You should complete the previous micro courses first.
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-outline-dark"
+                        data-bs-dismiss="modal"
+                    >
+                        Dismiss
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-dark"
+                        @click="confirmShowMicro"
+                    >
+                        Start anyway
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted, watch, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user.js";
 import { useCourseStore } from "../stores/course.js";
@@ -15,6 +15,10 @@ import FileList from "./FileList.vue";
 import Loader from "./Loader.vue";
 import * as pdfjsLib from "pdfjs-dist";
 import pdfWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
+import { encoding_for_model } from "tiktoken";
+
+const MAX_TPM =
+    import.meta.env.VITE_MAX_TPM - import.meta.env.VITE_MAX_PROMPT_SIZE;
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
@@ -35,6 +39,10 @@ const { isLoading: isLoadingFiles, load: loadFiles } =
     useSectionLoader("files");
 const { isLoading: isGeneratingCourse, load: genCourseLoader } =
     useSectionLoader("genCourse");
+
+const enc = encoding_for_model("gpt-5-mini");
+const numTokens = ref(0);
+const percTokens = computed(() => (numTokens.value * 100) / MAX_TPM);
 
 function readFileAsText(file) {
     // NOTE: they're all considered plain text files...
@@ -66,8 +74,6 @@ async function readFileAsPDF(file) {
         const pageText = textContent.items.map((item) => item.str).join(" ");
         fullText += pageText + "\n\n";
     }
-
-    console.log(fullText);
 
     return fullText;
 }
@@ -146,8 +152,22 @@ async function generate() {
     });
 }
 
+function calculateTokens() {
+    numTokens.value = enc.encode(
+        materialsStore.materials.reduce(
+            (acc, current) => (acc += current.title + current.content),
+            "",
+        ),
+    ).length;
+}
+
+watch(materialsStore, () => {
+    calculateTokens();
+});
+
 onMounted(async () => {
     await refreshMaterials();
+    calculateTokens();
 });
 </script>
 
@@ -182,6 +202,18 @@ onMounted(async () => {
                             :deleteFile="deleteFile"
                         />
                     </Loader>
+
+                    <div
+                        :class="[
+                            'my-3',
+                            'w-100',
+                            'text-end',
+                            numTokens > MAX_TPM ? 'text-danger' : '',
+                        ]"
+                        style="font-size: 16px"
+                    >
+                        {{ parseInt(percTokens) }}% toks
+                    </div>
 
                     <!-- Dropzone -->
                     <div
@@ -220,7 +252,8 @@ onMounted(async () => {
                         <button
                             :disabled="
                                 materialsStore.materials.length === 0 ||
-                                isGeneratingCourse
+                                isGeneratingCourse ||
+                                numTokens > MAX_TPM
                             "
                             class="btn btn-dark rounded-pill"
                             @click="generate"

@@ -96,6 +96,7 @@ onMounted(async () => {
                         class="form-control rounded"
                         id="name"
                         style="background-color: white"
+                        @keyup.enter="submitCourse"
                     />
                 </div>
 

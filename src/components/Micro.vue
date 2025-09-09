@@ -2,7 +2,6 @@
 import { ref, computed, onMounted } from "vue";
 import { useCourseStore } from "../stores/course.js";
 import { useRouter, useRoute } from "vue-router";
-import { Modal } from "bootstrap";
 
 const router = useRouter();
 
@@ -73,7 +72,7 @@ function confirmShowMicro() {
 }
 
 onMounted(() => {
-    modalInstance = new Modal(confirmModal.value);
+    modalInstance = new bootstrap.Modal(confirmModal.value);
 });
 </script>
 

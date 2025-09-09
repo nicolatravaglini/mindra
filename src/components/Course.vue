@@ -39,8 +39,10 @@ const totalQuizzes = computed(() =>
 const totalCompletedQuizzes = computed(
     () => courseStore.progress.filter((p) => p.valutation >= 6).length,
 );
-const progPerc = computed(
-    () => (totalCompletedQuizzes.value * 100) / totalQuizzes.value,
+const progPerc = computed(() =>
+    totalQuizzes.value > 0
+        ? (totalCompletedQuizzes.value * 100) / totalQuizzes.value
+        : null,
 );
 
 async function deleteCourse() {
@@ -64,7 +66,11 @@ async function deleteCourse() {
                     <span class="ms-2">({{ estimatedTotalTime }})</span>
                     <br />
                     Completion percentage:
-                    <span class="fw-bold">{{ progPerc.toFixed(1) }}%</span>
+                    <span class="fw-bold">{{
+                        progPerc !== null
+                            ? progPerc.toFixed(1) + "%"
+                            : "generate the micro-courses to get the percentage!"
+                    }}</span>
                 </div>
             </div>
 

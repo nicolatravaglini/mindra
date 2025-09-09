@@ -9,13 +9,16 @@ const Course = z.object({
                 z.object({
                     title: z.string(),
                     description: z.string(),
-                    content: z.string(),
                     estimatedPomodoros: z.number(),
-                    quizzes: z.array(z.string()),
                 }),
             ),
         }),
     ),
+});
+
+const Micro = z.object({
+    content: z.string(),
+    quizzes: z.array(z.string()),
 });
 
 const Check = z.object({
@@ -23,4 +26,4 @@ const Check = z.object({
     comment: z.string(),
 });
 
-export { Course, Check };
+export { Course, Micro, Check };

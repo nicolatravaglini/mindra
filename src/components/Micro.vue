@@ -2,6 +2,9 @@
 import { ref, computed, onMounted } from "vue";
 import { useCourseStore } from "../stores/course.js";
 import { useRouter, useRoute } from "vue-router";
+import { generateMicro, getCourse } from "../api/course.js";
+import { useSectionLoader } from "../composables/useSectionLoader.js";
+import Loader from "../components/Loader.vue";
 
 const router = useRouter();
 
@@ -10,6 +13,10 @@ const props = defineProps({
     macroIdx: Number,
     microIdx: Number,
 });
+
+const { isLoading: isLoadingMicro, load: loadMicro } = useSectionLoader(
+    `micro-${props.macroIdx}-${props.microIdx}`,
+);
 
 const courseStore = useCourseStore();
 
@@ -71,6 +78,22 @@ function confirmShowMicro() {
     pushMicro();
 }
 
+async function refreshCourse() {
+    const fresh = await getCourse(courseStore._id);
+    courseStore.set(fresh);
+}
+
+async function genMicro() {
+    loadMicro(async () => {
+        const test = await generateMicro(
+            courseStore._id,
+            props.macroIdx,
+            props.microIdx,
+        );
+        await refreshCourse();
+    });
+}
+
 onMounted(() => {
     modalInstance = new bootstrap.Modal(confirmModal.value);
 });
@@ -99,7 +122,7 @@ onMounted(() => {
                 {{ micro.estimatedPomodoros }}
                 <span><i class="bi bi-stopwatch"></i></span>
             </div>
-            <div class="fst-italic">
+            <div class="fst-italic" v-if="totalQuizzes(micro) > 0">
                 {{ totalCompletedQuizzes(macroIdx, microIdx) }}/{{
                     totalQuizzes(micro)
                 }}
@@ -113,6 +136,7 @@ onMounted(() => {
         class="flex-shrink-0 w-25 d-flex justify-content-end align-items-center"
     >
         <button
+            v-if="micro.content"
             type="button"
             :class="[
                 'btn',
@@ -125,6 +149,24 @@ onMounted(() => {
             @click="showMicro"
         >
             <i class="bi bi-play h1"></i>
+        </button>
+        <button
+            v-else
+            type="button"
+            :class="[
+                'btn',
+                'bg-dark',
+                'text-white',
+                'w-50',
+                'h-100',
+                'rounded-0',
+            ]"
+            :disabled="isLoadingMicro"
+            @click="genMicro"
+        >
+            <Loader :isLoading="isLoadingMicro">
+                <i class="bi bi-stars h1"></i>
+            </Loader>
         </button>
     </div>
 

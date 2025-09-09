@@ -12,14 +12,32 @@ The output must strictly follow this structure:
         {
           "title": "Micro topic title",
           "description": "A brief explanation (1–3 sentences) of what the student will learn in this micro topic.",
-          "content": "See detailed requirements below.",
           "estimatedPomodoros": "An integer >= 1, estimating the number of 30-minute Pomodoro sessions required to study this micro topic in depth.",
-          "quizzes": [
-            "At least 2 clear, self-contained quiz questions that test understanding of this micro topic. Questions must be phrased as if for a student self-test. All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML."
-          ]
         }
       ]
     }
+  ]
+}
+
+Additional requirements:
+1. Macro Topics: Divide the material into major areas of study. Each macro topic should cover a coherent set of ideas.
+2. Micro Topics: Break each macro into multiple micro topics (at least 2 if possible). Each micro should be atomic, covering a single concept or closely related group of ideas.
+3. Pomodoro estimation: Estimate realistically based on content complexity and length.
+
+The language of the course must match the one of the materials.
+`.trim();
+}
+
+export function generateMicroPrompt() {
+    return `
+You are given the following university course material and a specific micro argument defined by its title and description.
+Your task is to create the content and some quizzes of the micro-course.
+
+The output must strictly follow this structure:
+{
+  "content": "See detailed requirements below.",
+  "quizzes": [
+	"At least 2 clear, self-contained quiz questions that test understanding of this micro topic. Questions must be phrased as if for a student self-test. All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML."
   ]
 }
 
@@ -31,6 +49,7 @@ Critical requirements for the "content" field:
 	- Worked-out examples (with explanations of each step).
 	- Connections to related ideas where helpful.
 3. Use formatting for readability:
+	- Headers: <h1></h1>, <h2></h2>, ..., <h6></h6>
 	- Paragraphs: <p> ... </p>
 	- Lists: <ul>, <ol>, <li>
 	- Emphasis: <strong>, <em>
@@ -41,12 +60,9 @@ Critical requirements for the "content" field:
 5. Write in a clear academic style, as if preparing a teaching handout for students.
 
 Additional requirements:
-1. Macro Topics: Divide the material into major areas of study. Each macro topic should cover a coherent set of ideas.
-2. Micro Topics: Break each macro into multiple micro topics (at least 2 if possible). Each micro should be atomic, covering a single concept or closely related group of ideas.
-3. Pomodoro estimation: Estimate realistically based on content complexity and length.
-4. Quizzes: For each micro, provide 2–5 quiz questions. They should focus on understanding, application, and recall (not just definitions). Do NOT provide the answers, just the question. Use HTML tags for readability, and LaTeX for formulas.
+1. Quizzes: For each micro, provide 2–5 quiz questions. They should focus on understanding, application, and recall (not just definitions). Do NOT provide the answers, just the question. Use HTML tags for readability, and LaTeX for formulas. You must output them only as string, just the quizzes you came up to.
 
-The language of the course must match the one of the materials.
+The language of the content must match the one of the materials.
 `.trim();
 }
 

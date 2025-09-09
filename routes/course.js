@@ -1,7 +1,7 @@
 import express from "express";
 import isAuthenticated from "./isAuth.js";
 import { Course, Material } from "../schemas.js";
-import { generateCourse } from "../services/aiService.js";
+import { generateCourse, generateMicro } from "../services/aiService.js";
 
 const router = express.Router();
 
@@ -110,5 +110,51 @@ router.get("/:id/generate", isAuthenticated, async (req, res) => {
         res.status(500).json({ error: err });
     }
 });
+
+router.get(
+    "/:id/generate/:macroIdx/:microIdx",
+    isAuthenticated,
+    async (req, res) => {
+        try {
+            const userId = req.session.userId;
+            const courseId = req.params.id;
+            const macroIdx = req.params.macroIdx;
+            const microIdx = req.params.microIdx;
+            const course = await Course.findOne({
+                userId: userId,
+                _id: courseId,
+            });
+            const materialIds = course.materialIds;
+            const materials = await Material.find({
+                _id: { $in: materialIds },
+            });
+            const json = {
+                materials: materials,
+                title: course.course[macroIdx].micro[microIdx].title,
+                description:
+                    course.course[macroIdx].micro[microIdx].description,
+            };
+            const gen = await generateMicro(json);
+            const genJson = JSON.parse(gen);
+            await Course.updateOne(
+                { _id: courseId },
+                {
+                    $set: {
+                        [`course.${macroIdx}.micro.${microIdx}.content`]:
+                            genJson.content,
+                    },
+                    $push: {
+                        [`course.${macroIdx}.micro.${microIdx}.quizzes`]:
+                            genJson.quizzes,
+                    },
+                },
+            );
+            res.status(200).json({ gen: genJson });
+        } catch (err) {
+            console.error("Error while generating:", err);
+            res.status(500).json({ error: err });
+        }
+    },
+);
 
 export default router;

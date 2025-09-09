@@ -49,7 +49,7 @@ async function ask() {
         />
         <button
             class="btn btn-dark rounded-circle d-flex flex-row justify-content-center align-items-center p-0"
-            style="width: 2.5rem; height: 2.5rem"
+            style="width: 2.5rem; aspect-ratio: 1/1"
             :disabled="isLoadingQuestion"
             @click="ask"
         >

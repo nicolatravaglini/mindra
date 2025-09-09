@@ -20,8 +20,8 @@ const CourseSchema = new Schema({
                 {
                     title: String,
                     description: String,
-                    content: String,
                     estimatedPomodoros: Number,
+                    content: String,
                     quizzes: [String],
                 },
             ],

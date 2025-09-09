@@ -1,8 +1,9 @@
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
-import { Course, Check } from "./aiJsonSchemas.js";
+import { Course, Micro, Check } from "./aiJsonSchemas.js";
 import {
     generateCoursePrompt,
+    generateMicroPrompt,
     checkAnswerPrompt,
     generateQuizPrompt,
     answerQuestionPrompt,
@@ -17,7 +18,7 @@ export async function generateCourse(materials) {
     const prompt = generateCoursePrompt();
 
     const response = await openai.responses.parse({
-        model: process.env.OPENAI_MODEL,
+        model: process.env.OPENAI_WEAK_MODEL,
         input: [
             {
                 role: "system",
@@ -33,11 +34,31 @@ export async function generateCourse(materials) {
     return JSON.stringify(response.output_parsed.course);
 }
 
+export async function generateMicro(json) {
+    const prompt = generateMicroPrompt();
+
+    const response = await openai.responses.parse({
+        model: process.env.OPENAI_STRONG_MODEL,
+        input: [
+            {
+                role: "system",
+                content: prompt,
+            },
+            { role: "user", content: JSON.stringify(json) },
+        ],
+        text: {
+            format: zodTextFormat(Micro, "micro"),
+        },
+    });
+
+    return JSON.stringify(response.output_parsed);
+}
+
 export async function checkAnswer(json) {
     const prompt = checkAnswerPrompt();
 
     const response = await openai.responses.parse({
-        model: process.env.OPENAI_MODEL,
+        model: process.env.OPENAI_WEAK_MODEL,
         input: [
             {
                 role: "system",
@@ -57,7 +78,7 @@ export async function generateQuiz(title, content, quizzes) {
     const prompt = generateQuizPrompt();
 
     const response = await openai.responses.create({
-        model: process.env.OPENAI_MODEL,
+        model: process.env.OPENAI_WEAK_MODEL,
         input: [
             {
                 role: "system",
@@ -81,7 +102,7 @@ export async function answerQuestion(json) {
     const prompt = answerQuestionPrompt();
 
     const response = await openai.responses.create({
-        model: process.env.OPENAI_MODEL,
+        model: process.env.OPENAI_WEAK_MODEL,
         input: [
             {
                 role: "system",

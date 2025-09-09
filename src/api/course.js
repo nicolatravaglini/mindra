@@ -51,3 +51,14 @@ export async function generateCourse(id) {
     });
     return (await response.json()).gen;
 }
+
+export async function generateMicro(id, macroIdx, microIdx) {
+    const response = await fetch(
+        `${API_URL}/api/course/${id}/generate/${macroIdx}/${microIdx}`,
+        {
+            method: "GET",
+            credentials: "include",
+        },
+    );
+    return (await response.json()).gen;
+}

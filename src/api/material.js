@@ -19,6 +19,14 @@ export async function getMaterialsFromUserId(id) {
     return (await response.json()).materials;
 }
 
+export async function getMaterialById(id) {
+    const response = await fetch(`${API_URL}/api/material/${id}`, {
+        method: "GET",
+        credentials: "include",
+    });
+    return (await response.json()).material;
+}
+
 export async function addMaterialsToCourse(id, materials) {
     const response = await fetch(
         `${API_URL}/api/material/toCourse?courseId=${id}`,

@@ -71,6 +71,17 @@ router.get("/fromUser", isAuthenticated, async (req, res) => {
     }
 });
 
+router.get("/:id", isAuthenticated, async (req, res) => {
+    try {
+        const id = req.params.id;
+        const material = await Material.findOne({ _id: id });
+        res.status(200).json({ material: material });
+    } catch (err) {
+        console.error("Error while fetching:", err);
+        res.status(500).json({ error: err });
+    }
+});
+
 // Delete the material globally
 router.delete("/:id", isAuthenticated, async (req, res) => {
     try {

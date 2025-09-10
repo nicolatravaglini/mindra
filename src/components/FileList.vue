@@ -1,8 +1,12 @@
 <script setup>
+import { useRouter } from "vue-router";
+
 const props = defineProps({
     fileList: Array,
     deleteFile: Function,
 });
+
+const router = useRouter();
 
 function getFileIconClass(fileName) {
     const ext = fileName.toLowerCase().split(".").pop();
@@ -17,6 +21,10 @@ function getFileIconClass(fileName) {
             return "bi bi-file-earmark";
     }
 }
+
+function pushMaterialView(index) {
+    router.push(`/materials/${props.fileList[index]._id}`);
+}
 </script>
 
 <template>
@@ -26,8 +34,9 @@ function getFileIconClass(fileName) {
         <div
             v-for="(file, index) in fileList"
             :key="index"
-            class="position-relative border rounded p-3 bg-light text-dark d-flex flex-column align-items-start"
+            class="btn position-relative border rounded p-3 bg-light text-dark d-flex flex-column align-items-start"
             style="width: 180px; height: 75px"
+            @click="pushMaterialView(index)"
         >
             <!-- Icon + name -->
             <div class="d-flex align-items-center gap-2">
@@ -42,7 +51,7 @@ function getFileIconClass(fileName) {
                 type="button"
                 class="btn-close position-absolute top-0 end-0 m-2"
                 aria-label="Close"
-                @click="deleteFile(index)"
+                @click.prevent="deleteFile(index)"
             ></button>
         </div>
     </div>

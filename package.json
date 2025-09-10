@@ -15,6 +15,7 @@
         "express-session": "^1.18.2",
         "google-auth-library": "^10.2.1",
         "katex": "^0.16.22",
+        "markdown-it": "^14.1.0",
         "mongoose": "^8.17.0",
         "nedb": "^1.8.0",
         "openai": "^5.12.0",

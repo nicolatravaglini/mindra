@@ -4,6 +4,7 @@ import CoursesMenu from "../views/CoursesMenu.vue";
 import CourseView from "../views/CourseView.vue";
 import MyMaterials from "../views/MyMaterials.vue";
 import MicroView from "../views/MicroView.vue";
+import MaterialView from "../views/MaterialView.vue";
 import { checkAuth } from "../api/checkAuth.js";
 
 const routes = [
@@ -23,6 +24,11 @@ const routes = [
     {
         path: "/mymaterials",
         component: MyMaterials,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: "/materials/:id",
+        component: MaterialView,
         meta: { requiresAuth: true },
     },
 ];

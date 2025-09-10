@@ -30,7 +30,7 @@ function handleLoginError() {
 <template>
     <div class="container-fluid min-vh-100 d-flex flex-column">
         <main
-            class="flex-grow-1 d-flex align-items-center justify-content-center"
+            class="flex-grow-1 d-flex flex-column align-items-center justify-content-center gap-3"
         >
             <div class="text-center">
                 <h1 class="fw-bold mb-3" style="font-size: 2.5rem">Mindra</h1>
@@ -42,6 +42,17 @@ function handleLoginError() {
                     @success="handleLoginSuccess"
                     @error="handleLoginError"
                 />
+            </div>
+
+            <div class="">
+                <a href="https://ko-fi.com/N4N71IF71T" target="_blank"
+                    ><img
+                        height="36"
+                        style="border: 0px; height: 36px"
+                        src="https://storage.ko-fi.com/cdn/kofi4.png?v=6"
+                        border="0"
+                        alt="Buy Me a Coffee at ko-fi.com"
+                /></a>
             </div>
         </main>
     </div>

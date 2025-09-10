@@ -1,4 +1,5 @@
 <script setup>
+import { useSectionLoader } from "../composables/useSectionLoader.js";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
@@ -51,7 +52,7 @@ function pushMaterialView(index) {
                 type="button"
                 class="btn-close position-absolute top-0 end-0 m-2"
                 aria-label="Close"
-                @click.prevent="deleteFile(index)"
+                @click.stop="deleteFile(index)"
             ></button>
         </div>
     </div>

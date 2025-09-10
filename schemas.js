@@ -43,6 +43,7 @@ const MaterialSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     fileName: String,
     content: String,
+    file: Buffer,
 });
 
 const User = model("User", UserSchema);

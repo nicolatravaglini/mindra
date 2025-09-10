@@ -4,29 +4,19 @@ import { Material, Course } from "../schemas.js";
 
 const router = express.Router();
 
-// Post materials globally
-router.post("/", isAuthenticated, async (req, res) => {
-    try {
-        const body = req.body;
-        if (!body) return res.status(400).json({ error: "Invalid body" });
-        body.userId = req.session.userId;
-        const newMaterial = await Material.create(body);
-        console.log("Insertion completed:", newMaterial);
-        res.status(201).json(newMaterial);
-    } catch (err) {
-        console.error("Error while inserting:", err);
-        res.status(500).json({ error: err });
-    }
-});
-
 // Post materials to your course and globally
 router.post("/toCourse", isAuthenticated, async (req, res) => {
     try {
         const courseId = req.query.courseId;
         const userId = req.session.userId;
         let body = req.body;
+        console.log("POST MATERIALS");
+        console.log(body);
         if (!body) return res.status(400).json({ error: "Invalid body" });
         body = body.map((mat) => ({ ...mat, userId: userId }));
+        body.forEach((mat) => {
+            mat.file = Buffer.from(mat.file, "base64");
+        });
         const newMaterials = await Material.insertMany(body);
         console.log("Insertion completed:", newMaterials);
         const updatedCourse = await Course.updateOne(

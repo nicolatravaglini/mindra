@@ -56,6 +56,20 @@ function readFileAsText(file) {
     });
 }
 
+function readBuffer(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            const buffer = reader.result.split(",")[1];
+            console.log(buffer);
+            resolve(buffer);
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
 async function readFileAsPDF(file) {
     // Leggi il file come ArrayBuffer
     const arrayBuffer = await file.arrayBuffer();
@@ -94,15 +108,20 @@ async function uploadFiles(fileList) {
 
         for (const file of fileList) {
             const extension = extensionOf(file.name);
+
             let content;
             if (extension === "pdf") {
                 content = await readFileAsPDF(file);
             } else {
                 content = await readFileAsText(file);
             }
+
+            let buffer = await readBuffer(file);
+
             materials.push({
                 fileName: file.name,
                 content: content,
+                file: buffer,
             });
         }
 

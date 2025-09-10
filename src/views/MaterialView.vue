@@ -114,12 +114,17 @@ onUnmounted(() => {
                                 <i class="bi bi-arrow-right"></i>
                             </button>
                         </div>
-                        <VuePdfEmbed
-                            text-layer
-                            :source="material.file"
-                            :page="pdfPage"
-                            :width="divPixels"
-                        />
+                        <div
+                            class="my-2 border border-dark-subtle border-secondary rounded-4 p-0"
+                            style="overflow: hidden"
+                        >
+                            <VuePdfEmbed
+                                text-layer
+                                :source="material.file"
+                                :page="pdfPage"
+                                :width="divPixels"
+                            />
+                        </div>
                     </div>
                 </div>
             </Loader>

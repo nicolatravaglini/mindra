@@ -56,7 +56,11 @@ async function ask() {
             <i class="bi bi-stars"></i>
         </button>
     </div>
-    <Loader v-if="answer || isLoadingQuestion" :isLoading="isLoadingQuestion">
+    <Loader
+        v-if="answer || isLoadingQuestion"
+        :isLoading="isLoadingQuestion"
+        msg="Answering your question..."
+    >
         <Content :content="answer" style="font-size: 18px" />
     </Loader>
 </template>

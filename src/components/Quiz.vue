@@ -96,7 +96,10 @@ onMounted(() => {
             Check answer
         </button>
         <div class="mt-3 w-100">
-            <Loader :isLoading="valutationLoader.isLoading.value">
+            <Loader
+                :isLoading="valutationLoader.isLoading.value"
+                msg="Checking your answer..."
+            >
                 <div v-if="findQuiz.length > 0" class="border-top">
                     <div class="pt-2">
                         <span class="fw-bold">Answer: </span>

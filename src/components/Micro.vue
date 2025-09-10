@@ -153,15 +153,8 @@ onMounted(() => {
         <button
             v-else
             type="button"
-            :class="[
-                'btn',
-                'bg-dark',
-                'text-white',
-                'w-50',
-                'h-100',
-                'rounded-0',
-            ]"
-            :disabled="isLoadingMicro"
+            class="btn bg-dark text-white w-50 h-100 rounded-0 d-flex flex-row justify-content-center align-items-center"
+            :disabled="isLoadingMicro || courseStore.materialIds.length === 0"
             @click="genMicro"
         >
             <Loader :isLoading="isLoadingMicro">

@@ -215,7 +215,7 @@ onMounted(async () => {
                 data-bs-parent="#accordion"
             >
                 <div class="accordion-body">
-                    <Loader :isLoading="isLoadingFiles">
+                    <Loader :isLoading="isLoadingFiles" msg="Loading files...">
                         <FileList
                             :fileList="materialsStore.materials"
                             :deleteFile="deleteFile"
@@ -281,8 +281,13 @@ onMounted(async () => {
                         </button>
                     </div>
 
-                    <div v-if="isGeneratingCourse" class="text-center mt-3">
-                        <div class="spinner-border" role="status"></div>
+                    <div
+                        class="d-flex flex-row justify-content-center align-items-center mt-3"
+                    >
+                        <Loader
+                            :isLoading="isGeneratingCourse"
+                            msg="Generating course..."
+                        />
                     </div>
                 </div>
             </div>

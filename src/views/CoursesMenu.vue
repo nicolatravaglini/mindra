@@ -53,7 +53,7 @@ onMounted(async () => {
 
             <!-- List of courses -->
             <div class="d-grid gap-3 mb-4">
-                <Loader :isLoading="isLoadingCourses">
+                <Loader :isLoading="isLoadingCourses" msg="Loading courses...">
                     <button
                         v-for="course in courses"
                         class="text-start px-4 py-3 border text-dark bg-white"

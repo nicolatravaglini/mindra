@@ -32,7 +32,10 @@ onMounted(async () => {
 <template>
     <div class="container-fluid">
         <div class="container pt-5">
-            <Loader :isLoading="isLoadingMyMaterials">
+            <Loader
+                :isLoading="isLoadingMyMaterials"
+                msg="Loading materials..."
+            >
                 <FileList
                     :fileList="materialsStore.materials"
                     :deleteFile="deleteFile"

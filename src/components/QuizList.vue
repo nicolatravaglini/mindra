@@ -45,7 +45,10 @@ async function add() {
             <Quiz :quiz="quiz" :idx="i" />
         </div>
 
-        <Loader :isLoading="isLoadingQuizzes"></Loader>
+        <Loader
+            :isLoading="isLoadingQuizzes"
+            msg="Generating new quiz..."
+        ></Loader>
 
         <button
             class="btn btn-outline-dark rounded-pill align-self-center my-2"

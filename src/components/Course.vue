@@ -53,49 +53,47 @@ async function deleteCourse() {
 </script>
 
 <template>
-    <div class="container mt-5">
-        <div class="d-flex flex-row justify-content-between align-items-start">
+    <div class="d-flex flex-row justify-content-between align-items-start">
+        <div>
+            <h3>Course</h3>
+
+            <!-- Info -->
             <div>
-                <h3>Course</h3>
-
-                <!-- Info -->
-                <div>
-                    Estimated total pomodoros:
-                    <span class="fw-bold">{{ estimatedTotalPomodoros }}</span>
-                    <i class="bi bi-stopwatch"></i>
-                    <span class="ms-2">({{ estimatedTotalTime }})</span>
-                    <br />
-                    Completion percentage:
-                    <span class="fw-bold">{{
-                        progPerc !== null
-                            ? progPerc.toFixed(1) + "%"
-                            : "generate the micro-courses to get the percentage!"
-                    }}</span>
-                </div>
+                Estimated total pomodoros:
+                <span class="fw-bold">{{ estimatedTotalPomodoros }}</span>
+                <i class="bi bi-stopwatch"></i>
+                <span class="ms-2">({{ estimatedTotalTime }})</span>
+                <br />
+                Completion percentage:
+                <span class="fw-bold">{{
+                    progPerc !== null
+                        ? progPerc.toFixed(1) + "%"
+                        : "generate the micro-courses to get the percentage!"
+                }}</span>
             </div>
-
-            <SettingsDropdown>
-                <li>
-                    <button
-                        class="dropdown-item d-flex flex-row justify-content-between align-items-center"
-                        @click="deleteCourse"
-                    >
-                        Delete
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </li>
-            </SettingsDropdown>
         </div>
 
-        <!-- Progress -->
-        <div class="mt-2">
-            <ProgressBar :progPerc="progPerc" />
-        </div>
+        <SettingsDropdown>
+            <li>
+                <button
+                    class="dropdown-item d-flex flex-row justify-content-between align-items-center"
+                    @click="deleteCourse"
+                >
+                    Delete
+                    <i class="bi bi-trash"></i>
+                </button>
+            </li>
+        </SettingsDropdown>
+    </div>
 
-        <!-- Course -->
-        <div class="mt-3">
-            <MacroList />
-        </div>
+    <!-- Progress -->
+    <div class="mt-2">
+        <ProgressBar :progPerc="progPerc" />
+    </div>
+
+    <!-- Course -->
+    <div class="mt-3">
+        <MacroList />
     </div>
 </template>
 

@@ -9,8 +9,13 @@ import { useSectionLoader } from "../composables/useSectionLoader.js";
 import CourseMaterial from "../components/CourseMaterial.vue";
 import Course from "../components/Course.vue";
 import SettingsDropdown from "../components/SettingsDropdown.vue";
+import Loader from "../components/Loader.vue";
 
 const router = useRouter();
+
+// States
+const { isLoading: isLoadingCourse, load: loadCourse } =
+    useSectionLoader("course");
 
 // Stores
 const userStore = useUserStore();
@@ -34,36 +39,46 @@ async function deleteCourse() {
 }
 
 onMounted(async () => {
-    await refreshCourse();
+    loadCourse(async () => {
+        await refreshCourse();
+    });
 });
 </script>
 
 <template>
     <div class="container-fluid">
-        <div class="container pt-5">
-            <!-- Name of the course -->
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="mb-4">
-                    <h1>{{ courseStore.name }}</h1>
+        <div class="container mt-5 p-0">
+            <Loader :isLoading="isLoadingCourse" msg="Loading course...">
+                <div class="container">
+                    <!-- Name of the course -->
+                    <div
+                        class="d-flex justify-content-between align-items-center"
+                    >
+                        <div class="mb-4">
+                            <h1>{{ courseStore.name }}</h1>
+                        </div>
+
+                        <SettingsDropdown>
+                            <li>
+                                <button
+                                    class="dropdown-item d-flex flex-row justify-content-between align-items-center"
+                                    @click="deleteCourse"
+                                >
+                                    Delete
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </li>
+                        </SettingsDropdown>
+                    </div>
+
+                    <CourseMaterial />
                 </div>
 
-                <SettingsDropdown>
-                    <li>
-                        <button
-                            class="dropdown-item d-flex flex-row justify-content-between align-items-center"
-                            @click="deleteCourse"
-                        >
-                            Delete
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </li>
-                </SettingsDropdown>
-            </div>
-
-            <CourseMaterial />
+                <div class="container mt-5">
+                    <Course v-if="courseStore.course.length > 0" />
+                </div>
+            </Loader>
         </div>
-
-        <Course v-if="courseStore.course.length > 0" />
     </div>
 </template>
 

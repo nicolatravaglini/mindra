@@ -42,7 +42,10 @@ router.get("/fromCourse", isAuthenticated, async (req, res) => {
         const courseId = req.query.courseId;
         const course = await Course.findOne({ _id: courseId });
         const materialIds = course.materialIds;
-        const allMaterials = await Material.find({ _id: { $in: materialIds } });
+        const allMaterials = await Material.find(
+            { _id: { $in: materialIds } },
+            { _id: 1, userId: 1, fileName: 1, content: 1 },
+        );
         res.status(200).json({ materials: allMaterials });
     } catch (err) {
         console.error("Error while fetching:", err);
@@ -53,7 +56,10 @@ router.get("/fromCourse", isAuthenticated, async (req, res) => {
 router.get("/fromUser", isAuthenticated, async (req, res) => {
     try {
         const userId = req.session.userId;
-        const allMaterials = await Material.find({ userId: userId });
+        const allMaterials = await Material.find(
+            { userId: userId },
+            { _id: 1, userId: 1, fileName: 1 },
+        );
         res.status(200).json({ materials: allMaterials });
     } catch (err) {
         console.error("Error while fetching:", err);

@@ -92,7 +92,10 @@ router.get("/:id/generate", isAuthenticated, async (req, res) => {
             _id: courseId,
         });
         const materialIds = course.materialIds;
-        const materials = await Material.find({ _id: { $in: materialIds } });
+        const materials = await Material.find(
+            { _id: { $in: materialIds } },
+            { fileName: 1, content: 1 },
+        );
         const gen = await generateCourse(materials);
         const genJson = JSON.parse(gen);
         await Course.updateOne(
@@ -125,9 +128,12 @@ router.get(
                 _id: courseId,
             });
             const materialIds = course.materialIds;
-            const materials = await Material.find({
-                _id: { $in: materialIds },
-            });
+            const materials = await Material.find(
+                {
+                    _id: { $in: materialIds },
+                },
+                { fileName: 1, content: 1 },
+            );
             const json = {
                 materials: materials,
                 title: course.course[macroIdx].micro[microIdx].title,

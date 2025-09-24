@@ -77,7 +77,7 @@ onUnmounted(() => {
 <template>
     <div class="container-fluid">
         <div class="container pt-5">
-            <Loader :isLoading="isLoadingPdf">
+            <Loader :isLoading="isLoadingPdf" msg="Loading the material...">
                 <!-- Title -->
                 <div class="mb-4 border-bottom">
                     <h1>{{ material.fileName }}</h1>

@@ -31,19 +31,35 @@ async function logoutAndLogin() {
 </script>
 
 <template>
-    <nav v-if="route.path !== '/login'" class="navbar navbar-expand">
+    <nav
+        v-if="route.path !== '/login'"
+        class="navbar navbar-expand rounded-pill border shadow-sm m-2"
+    >
         <div
             class="container-fluid justify-content-between gap-3 align-items-center"
         >
             <div class="d-flex align-items-center justify-content-start">
                 <div v-show="route.path !== '/courses'">
-                    <button class="btn" @click="goBack">
+                    <button class="btn border-0" @click="goBack">
                         <i class="bi bi-arrow-left"></i>
                     </button>
                 </div>
 
-                <div>
-                    <button class="btn" @click="goMyMaterials">
+                <div
+                    class="btn border-0 d-flex flex-row justify-content-between align-items-center p-0 mx-2 gap-2"
+                    @click="router.push('/courses')"
+                >
+                    <div class="fw-bold fs-4">Mindra</div>
+                    <img
+                        src="../assets/mindra.png"
+                        height="50px"
+                        class="rounded-circle"
+                        style="aspect-ratio: 1/1"
+                    />
+                </div>
+
+                <div class="mx-3">
+                    <button class="btn border-0 p-0 m-0" @click="goMyMaterials">
                         My materials
                     </button>
                 </div>
@@ -79,4 +95,8 @@ async function logoutAndLogin() {
     </nav>
 </template>
 
-<style scoped></style>
+<style scoped>
+nav {
+    /*background-color: #ffe18d;*/
+}
+</style>

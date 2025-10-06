@@ -110,7 +110,7 @@ onMounted(() => {
                     <div class="fs-4 fw-bold">
                         {{ findQuiz[0].valutation }} / 10
                     </div>
-                    <div class="fw-lighter">
+                    <div class="fw-light">
                         <Content
                             :content="findQuiz[0].comment"
                             style="font-size: 18px"

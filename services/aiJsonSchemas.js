@@ -17,7 +17,7 @@ const Course = z.object({
 });
 
 const Micro = z.object({
-    content: z.string(),
+    content: z.array(z.string()),
     quizzes: z.array(z.string()),
 });
 

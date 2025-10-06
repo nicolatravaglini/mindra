@@ -2,7 +2,6 @@ import express from "express";
 import fs from "fs";
 import https from "https";
 import cors from "cors";
-import Datastore from "nedb";
 import authRoute from "./routes/auth.js";
 import userRoute from "./routes/user.js";
 import courseRoute from "./routes/course.js";

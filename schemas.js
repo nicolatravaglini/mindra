@@ -21,7 +21,7 @@ const CourseSchema = new Schema({
                     title: String,
                     description: String,
                     estimatedPomodoros: Number,
-                    content: String,
+                    content: [String],
                     quizzes: [String],
                 },
             ],

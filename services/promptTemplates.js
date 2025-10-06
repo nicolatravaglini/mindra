@@ -34,35 +34,50 @@ You are given the following university course material and a specific micro argu
 Your task is to create the content and some quizzes of the micro-course.
 
 The output must strictly follow this structure:
+
 {
-  "content": "See detailed requirements below.",
+  "content": [
+    "Each element of this array must be an HTML-formatted string representing a self-contained slide or section of the lesson. Each slide should cover one key concept or subtopic of the micro argument."
+  ],
   "quizzes": [
-	"At least 2 clear, self-contained quiz questions that test understanding of this micro topic. Questions must be phrased as if for a student self-test. All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML."
+    "At least 2 clear, self-contained quiz questions that test understanding of this micro topic. Questions must be phrased as if for a student self-test. All formulas must be written in LaTeX, using \\( ... \\) for inline and \\[ ... \\] for block display. Do not convert them into images or use MathML."
   ]
 }
 
-Critical requirements for the "content" field:
-1. The "content" must be a detailed, structured explanation of the micro topic, rewritten from the provided material. Do not summarize in 2–3 sentences—write at the level of a study guide or mini-chapter.
-2. Always include:
+Critical requirements for the "content" field
+1. "content" must be an array of HTML-formatted strings, where each array element represents a single slide or section.
+	- Each slide should be a coherent, didactic unit (e.g. “Definition”, “Example”, “Proof”, “Applications”).
+	- Aim for 4–10 slides per micro-course, depending on the complexity of the topic.
+2. Each slide must contain:
+	- A header (e.g. <h2> or <h3>) describing its focus.
+	- One or more paragraphs of explanation in <p> tags.
+	- Optional lists, examples, or math formulas as needed.
+3. Overall, the slides together must form a detailed, structured explanation of the micro topic, rewritten from the provided material. Do not summarize in 2–3 sentences — write at the level of a study guide or mini-chapter.
+4. Include:
 	- Clear definitions and explanations of all relevant concepts.
 	- Step-by-step reasoning for theorems, proofs, or algorithms.
 	- Worked-out examples (with explanations of each step).
 	- Connections to related ideas where helpful.
-3. Use formatting for readability:
-	- Headers: <h1></h1>, <h2></h2>, ..., <h6></h6>
-	- Paragraphs: <p> ... </p>
+5. Use HTML for structure:
+	- Headers: <h1>, <h2>, … <h6>
+	- Paragraphs: <p> … </p>
 	- Lists: <ul>, <ol>, <li>
 	- Emphasis: <strong>, <em>
-4. All mathematical content must use LaTeX, formatted as:
+6. All mathematical content must use LaTeX, formatted as:
 	- Inline math: \\( ... \\)
 	- Block math: \\[ ... \\]
 	- Do not output images or MathML.
-5. Write in a clear academic style, as if preparing a teaching handout for students.
+7. Write in a clear academic style, as if preparing a teaching handout for students.
 
-Additional requirements:
-1. Quizzes: For each micro, provide 2–5 quiz questions. They should focus on understanding, application, and recall (not just definitions). Do NOT provide the answers, just the question. Use HTML tags for readability, and LaTeX for formulas. You must output them only as string, just the quizzes you came up to.
+Additional requirements for "quizzes":
+1. Provide 2–5 quiz questions.
+2. Each quiz question must:
+	- Test understanding, application, or recall.
+	- Be clear and self-contained (no dependency on external context).
+	- Use HTML for formatting and LaTeX for formulas.
+3. Do not include answers — only the questions.
 
-The language of the content must match the one of the materials.
+The language of the content must match the one of the provided materials.
 `.trim();
 }
 

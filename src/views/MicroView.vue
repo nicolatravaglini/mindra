@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watchEffect } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useCourseStore } from "../stores/course.js";
+import SlideList from "../components/SlideList.vue";
 import Content from "../components/Content.vue";
 import QuizList from "../components/QuizList.vue";
 import Question from "../components/Question.vue";
@@ -45,16 +46,25 @@ onMounted(async () => {
         <div
             class="d-flex flex-column justify-content-start align-items-center gap-3 mt-3 w-100"
         >
-            <div class="border rounded-3 p-4 w-100">
-                <div class="fs-3 pb-2 border-bottom fw-bold">
-                    {{ micro.title }}
-                </div>
-                <Content
-                    class="mt-3"
-                    style="font-size: 20px"
-                    :content="micro.content"
-                />
+            <div class="fs-3 border-bottom fw-bold w-100">
+                {{ micro.title }}
             </div>
+            <div class="m-2 w-100">
+                <SlideList :content="micro.content" />
+                <!--
+                <div class="border rounded-3 p-4 w-100">
+                    <div class="fs-3 pb-2 border-bottom fw-bold">
+                        {{ micro.title }}
+                    </div>
+                    <Content
+                        class="mt-3"
+                        style="font-size: 20px"
+                        :content="micro.content"
+                    />
+                </div>
+				-->
+            </div>
+
             <div
                 class="border rounded-3 p-3 w-100 d-flex flex-column justify-content-start align-items-start gap-3"
             >
@@ -67,6 +77,7 @@ onMounted(async () => {
                 </div>
                 <Question />
             </div>
+
             <div class="accordion mt-3 w-100" id="accordionQuiz">
                 <div class="accordion-item w-100">
                     <h2 class="accordion-header">

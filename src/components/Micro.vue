@@ -136,7 +136,7 @@ onMounted(() => {
         class="flex-shrink-0 w-25 d-flex justify-content-end align-items-center"
     >
         <button
-            v-if="micro.content"
+            v-if="micro.content.length > 0"
             type="button"
             :class="[
                 'btn',

@@ -105,7 +105,7 @@ onUnmounted(() => {
                             >
                                 <i class="bi bi-arrow-left"></i>
                             </button>
-                            <div class="">Page: {{ pdfPage }}</div>
+                            <div class="">{{ pdfPage }}/{{ numPdfPages }}</div>
                             <button
                                 class="btn border-0"
                                 @click="pdfPage++"

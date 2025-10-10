@@ -46,7 +46,7 @@ onMounted(async () => {
         <div
             class="d-flex flex-column justify-content-start align-items-center gap-3 mt-3 w-100"
         >
-            <div class="fs-3 border-bottom fw-bold w-100">
+            <div class="fs-1 border-bottom fw-bold w-100">
                 {{ micro.title }}
             </div>
             <div class="m-2 w-100">

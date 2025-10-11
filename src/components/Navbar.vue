@@ -33,7 +33,7 @@ async function logoutAndLogin() {
 <template>
     <nav
         v-if="route.path !== '/login'"
-        class="navbar navbar-expand rounded-pill border shadow-sm m-2"
+        class="navbar navbar-expand rounded-pill border shadow-sm m-2 fixed-top bg-white"
     >
         <div
             class="container-fluid justify-content-between gap-3 align-items-center"

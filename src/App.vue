@@ -5,7 +5,9 @@ import Navbar from "./components/Navbar.vue";
 
 <template>
     <Navbar />
-    <RouterView />
+    <div style="padding-top: 56px">
+        <RouterView />
+    </div>
 </template>
 
 <style scoped></style>

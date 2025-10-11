@@ -42,7 +42,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="container">
+    <div class="container mt-5">
         <div
             class="d-flex flex-column justify-content-start align-items-center gap-3 mt-3 w-100"
         >

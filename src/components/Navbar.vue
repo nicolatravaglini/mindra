@@ -38,7 +38,9 @@ async function logoutAndLogin() {
         <div
             class="container-fluid justify-content-between gap-3 align-items-center"
         >
-            <div class="d-flex align-items-center justify-content-start">
+            <div
+                class="d-flex align-items-center justify-content-start gap-2 px-2"
+            >
                 <div v-show="route.path !== '/courses'">
                     <button class="btn border-0" @click="goBack">
                         <i class="bi bi-arrow-left"></i>
@@ -46,7 +48,7 @@ async function logoutAndLogin() {
                 </div>
 
                 <div
-                    class="btn border-0 d-flex flex-row justify-content-between align-items-center p-0 mx-2 gap-2"
+                    class="btn border-0 d-flex flex-row justify-content-between align-items-center p-0 gap-2"
                     @click="router.push('/courses')"
                 >
                     <div class="fw-bold fs-4">Mindra</div>
@@ -58,7 +60,13 @@ async function logoutAndLogin() {
                     />
                 </div>
 
-                <div class="mx-3">
+                <div class="text-secondary">
+                    <i class="bi bi-dot"></i>
+                </div>
+
+                <div
+                    class="d-flex flex-row justify-content-center align-items-center"
+                >
                     <button class="btn border-0 p-0 m-0" @click="goMyMaterials">
                         My materials
                     </button>

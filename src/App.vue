@@ -1,11 +1,13 @@
 <script setup>
-import { RouterView } from "vue-router";
+import { RouterView, useRoute } from "vue-router";
 import Navbar from "./components/Navbar.vue";
+
+const route = useRoute();
 </script>
 
 <template>
     <Navbar />
-    <div style="padding-top: 56px">
+    <div :style="{ 'padding-top': route.path !== '/login' ? '56px' : '0px' }">
         <RouterView />
     </div>
 </template>
